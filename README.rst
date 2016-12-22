@@ -26,6 +26,8 @@ Usage
 
     $ pytest -v --random-order-mode=module
 
+    $ pytest -v --random-order-mode=class
+
 
 License
 -------

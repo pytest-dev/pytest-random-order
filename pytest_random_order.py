@@ -2,25 +2,15 @@
 
 import random
 
-import pytest
-
 
 def pytest_addoption(parser):
     group = parser.getgroup('random-order')
-    # group.addoption(
-    #     '--random-order-seed',
-    #     action='store',
-    #     type=int,
-    #     dest='random_order_seed',
-    #     default=None,
-    #     help='Seed value to reproduce a particular order',
-    # )
     group.addoption(
         '--random-order-mode',
         action='store',
         dest='random_order_mode',
         default='module',
-        choices=('global', 'package', 'module'),
+        choices=('global', 'package', 'module', 'class'),
         help='Limit reordering of test items across units of code',
     )
 
@@ -39,32 +29,52 @@ _random_order_item_keys = {
     'global': lambda x: None,
     'package': lambda x: x.module.__package__,
     'module': lambda x: x.module.__name__,
+    'class': lambda x: (x.module.__name__, x.cls.__name__) if x.cls else None,
 }
 
 
+def _shuffle_items(items, key=None, preserve_bucket_order=False):
+    """
+    Shuffles `items`, a list, in place.
+
+    If `key` is None, items are shuffled across the entire list.
+
+    Otherwise `key` is a function called for each item in `items` to
+    calculate key of bucket in which the item falls.
+
+    Bucket defines the boundaries across which tests will not
+    be reordered.
+
+    `preserve_bucket_order` is only customisable for testing purposes.
+    There is no use case for predefined bucket order, is there?
+    """
+
+    # If `key` is falsey, shuffle is global.
+    if not key:
+        random.shuffle(items)
+        return
+
+    buckets = []
+    this_key = '__not_initialised__'
+    for item in items:
+        prev_key = this_key
+        this_key = key(item)
+        if this_key != prev_key:
+            buckets.append([])
+        buckets[-1].append(item)
+
+    # Shuffle within bucket
+    for bucket in buckets:
+        random.shuffle(bucket)
+
+    # Shuffle buckets
+    if not preserve_bucket_order:
+        random.shuffle(buckets)
+
+    items[:] = [item for bucket in buckets for item in bucket]
+    return
+
+
 def pytest_collection_modifyitems(session, config, items):
-    sections = []
-
-    # One of: global, package, module
     shuffle_mode = config.getoption('random_order_mode')
-
-    item_key = _random_order_item_keys[shuffle_mode]
-
-    # Mark the beginning and ending of each key's test items in the items collection
-    # so we know the boundaries of reshuffle.
-    for i, item in enumerate(items):
-        key = item_key(item)
-        if not sections:
-            assert i == 0
-            sections.append([key, i, None])
-        elif sections[-1][0] != key:
-            sections[-1][2] = i
-            sections.append([key, i, None])
-
-    if sections:
-        sections[-1][2] = len(items)
-
-    for key, i, j in sections:
-        key_items = items[i:j]
-        random.shuffle(key_items)
-        items[i:j] = key_items
+    _shuffle_items(items, key=_random_order_item_keys[shuffle_mode])
