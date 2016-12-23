@@ -1,7 +1,7 @@
 pytest-random-order
 ===================================
 
-This is a **pytest** plugin to randomise the order in which tests are run with a little bit of control
+This is a pytest plugin **to randomise the order** in which tests are run **with some control**
 over how much randomness one allows.
 
 It is a good idea to randomise the order in which your tests run
@@ -9,7 +9,7 @@ because a test running early as part of a larger suite of tests may have left
 the system under test in a particularly fortunate state for a subsequent test to pass.
 
 How Random
-__________
+----------
 
 **pytest-random-order** groups tests in buckets, shuffles them within buckets and then shuffles the buckets.
 
