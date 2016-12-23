@@ -13,12 +13,12 @@ __________
 
 **pytest-random-order** groups tests in buckets, shuffles them within buckets and then shuffles the buckets.
 
-User can choose among four types of buckets to use:
+You can choose from four types of buckets:
 
     * ``class``
-    * ``module`` -- **this is the default setting**
+    * ``module`` - **this is the default setting**
     * ``package``
-    * ``global`` -- all tests fall in the same bucket, full randomness, tests probably take longer to run
+    * ``global`` - all tests fall in the same bucket, full randomness, tests probably take longer to run
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
 then here are just two of many potential orderings that non-global randomisation can produce:
@@ -33,8 +33,8 @@ As you can see, all C tests are executed "next" to each other and so are tests i
 Tests from any bucket X are guaranteed to not be interspersed with tests from another bucket Y.
 For example, if you choose bucket type ``module`` then bucket X contains all tests that are in this module.
 
-Note that modules (and hence tests inside those modules) that belong to package ``x.y`` do not belong
-to package ``x.y.z``, so they will fall in different buckets when randomising with ``package`` bucket type.
+Note that modules (and hence tests inside those modules) that belong to package ``x.y.z`` do not belong
+to package ``x.y``, so they will fall in different buckets when randomising with ``package`` bucket type.
 
 By default, your tests will be randomised at ``module`` level which means that
 tests within a single module X will be executed in no particular order, but tests from
