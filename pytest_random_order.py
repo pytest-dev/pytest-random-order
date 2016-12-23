@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import random
+import sys
+import traceback
 
 
 def pytest_addoption(parser):
     group = parser.getgroup('random-order')
     group.addoption(
-        '--random-order-mode',
+        '--random-order-bucket',
         action='store',
-        dest='random_order_mode',
+        dest='random_order_bucket',
         default='module',
         choices=('global', 'package', 'module', 'class'),
         help='Limit reordering of test items across units of code',
@@ -18,9 +20,9 @@ def pytest_addoption(parser):
 def pytest_report_header(config):
     out = None
 
-    if config.getoption('random_order_mode'):
-        mode = config.getoption('random_order_mode')
-        out = "Using --random-order-mode={0}".format(mode)
+    if config.getoption('random_order_bucket'):
+        bucket = config.getoption('random_order_bucket')
+        out = "Using --random-order-bucket={0}".format(bucket)
 
     return out
 
@@ -75,6 +77,34 @@ def _shuffle_items(items, key=None, preserve_bucket_order=False):
     return
 
 
+def _get_set_of_item_ids(items):
+    s = {}
+    try:
+        s = set(item.nodeid for item in items)
+    finally:
+        return s
+
+
 def pytest_collection_modifyitems(session, config, items):
-    shuffle_mode = config.getoption('random_order_mode')
-    _shuffle_items(items, key=_random_order_item_keys[shuffle_mode])
+    failure = None
+    item_ids = _get_set_of_item_ids(items)
+
+    try:
+        shuffle_mode = config.getoption('random_order_bucket')
+        _shuffle_items(items, key=_random_order_item_keys[shuffle_mode])
+
+    except Exception as e:
+        # If the number of items is still the same, we assume that we haven't messed up too hard
+        # and we can just return the list of items as it is.
+        _, _, exc_tb = sys.exc_info()
+        failure = 'pytest-random-order plugin has failed with {!r}:\n{}'.format(
+            e, ''.join(traceback.format_tb(exc_tb, 10))
+        )
+        config.warn(0, failure, None)
+
+    finally:
+        # Fail only if we have lost user's tests
+        if item_ids != _get_set_of_item_ids(items):
+            if not failure:
+                failure = 'pytest-random-order plugin has failed miserably'
+            raise RuntimeError(failure)
