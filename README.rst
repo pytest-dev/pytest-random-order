@@ -1,7 +1,16 @@
 pytest-random-order
 ===================================
 
-Pytest plugin to randomise the order of tests within module, package, or globally.
+**pytest** plugin to randomise the order of tests within module, package, or globally.
+
+This plugin allows you to control the level at which the order of tests is randomised
+through ``--random-order-mode`` command line option.
+
+By default, your tests will be randomised at ``module`` level which means that
+tests within a single module X will be executed in no particular order, but tests from
+other modules will not be mixed in between tests of module X.
+
+Similarly, you can randomise the order of tests at ``package`` and ``global`` levels.
 
 ----
 
@@ -10,7 +19,7 @@ Installation
 
 ::
 
-    $ pip install https://github.com/jbasko/pytest-random-order/archive/v0.0.0.tar.gz
+    $ pip install pytest-random-order
 
 
 Usage
