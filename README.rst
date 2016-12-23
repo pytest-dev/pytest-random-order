@@ -41,5 +41,5 @@ Usage
 License
 -------
 
-Distributed under the terms of the `MIT`_ license, "pytest-random-order" is free and open source software
+Distributed under the terms of the MIT license, "pytest-random-order" is free and open source software
 
