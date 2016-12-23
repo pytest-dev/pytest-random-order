@@ -4,5 +4,5 @@ def test_help_message(testdir):
     )
     result.stdout.fnmatch_lines([
         'random-order:',
-        '*--random-order-mode={global,package,module,class}*',
+        '*--random-order-bucket={global,package,module,class}*',
     ])

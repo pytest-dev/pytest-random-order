@@ -104,7 +104,7 @@ def tmp_tree_of_tests(testdir):
     return testdir
 
 
-def check_call_sequence(seq, shuffle_mode='module'):
+def check_call_sequence(seq, bucket='module'):
     all_values = collections.defaultdict(list)
     num_switches = collections.defaultdict(int)
 
@@ -131,39 +131,39 @@ def check_call_sequence(seq, shuffle_mode='module'):
     # These are just sanity tests, the actual shuffling is tested in test_shuffle,
     # assertions here are very relaxed.
 
-    if shuffle_mode == 'global':
+    if bucket == 'global':
         if num_module_switches <= num_modules:
             pytest.fail('Too few module switches for global shuffling')
         if num_package_switches <= num_packages:
             pytest.fail('Too few package switches for global shuffling')
 
-    elif shuffle_mode == 'package':
+    elif bucket == 'package':
         assert num_package_switches == num_packages
         if num_module_switches <= num_modules:
             pytest.fail('Too few module switches for package-limited shuffling')
 
-    elif shuffle_mode == 'module':
+    elif bucket == 'module':
         assert num_module_switches == num_modules
 
-    elif shuffle_mode == 'class':
+    elif bucket == 'class':
         # Each class can contribute to 1 or 2 switches.
         assert num_class_switches <= num_classes * 2
 
-        # Class shuffle is a subset of module shuffle.
+        # Class bucket is a special case of module bucket.
         # We have two classes in one module and these could be reshuffled so
         # the module could appear in sequence of buckets two times.
         assert num_modules <= num_module_switches <= num_modules + 1
 
 
-@pytest.mark.parametrize('mode', ['class', 'module', 'package', 'global'])
-def test_it_works_with_actual_tests(tmp_tree_of_tests, mode):
+@pytest.mark.parametrize('bucket', ['class', 'module', 'package', 'global'])
+def test_it_works_with_actual_tests(tmp_tree_of_tests, bucket):
     sequences = set()
 
     for x in range(5):
-        result = tmp_tree_of_tests.runpytest('--random-order-mode={}'.format(mode), '--verbose')
+        result = tmp_tree_of_tests.runpytest('--random-order-bucket={}'.format(bucket), '--verbose')
         result.assert_outcomes(passed=14, failed=3)
         seq = get_runtest_call_sequence(result)
-        check_call_sequence(seq, shuffle_mode=mode)
+        check_call_sequence(seq, bucket=bucket)
         assert len(seq) == 17
         sequences.add(seq)
 

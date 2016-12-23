@@ -1,0 +1,4 @@
+pytest
+tox
+coverage
+py
