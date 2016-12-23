@@ -29,7 +29,7 @@ _random_order_item_keys = {
     'global': lambda x: None,
     'package': lambda x: x.module.__package__,
     'module': lambda x: x.module.__name__,
-    'class': lambda x: (x.module.__name__, x.cls.__name__) if x.cls else None,
+    'class': lambda x: (x.module.__name__, x.cls.__name__) if x.cls else x.module.__name__,
 }
 
 

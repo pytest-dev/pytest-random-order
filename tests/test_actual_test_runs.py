@@ -8,7 +8,7 @@ import pytest
 Call = collections.namedtuple('Call', field_names=('package', 'module', 'cls', 'name'))
 
 
-def get_runtest_call_sequence(result, key=None):
+def get_runtest_call_sequence(result):
     """
     Returns a tuple of names of test methods that were run
     in the order they were run.
@@ -145,12 +145,14 @@ def check_call_sequence(seq, shuffle_mode='module'):
     elif shuffle_mode == 'module':
         assert num_module_switches == num_modules
 
-    elif shuffle_mode == 'cls':
+    elif shuffle_mode == 'class':
         # Each class can contribute to 1 or 2 switches.
         assert num_class_switches <= num_classes * 2
 
-        # Class shuffle is a subset of module shuffle
-        assert num_module_switches == num_modules
+        # Class shuffle is a subset of module shuffle.
+        # We have two classes in one module and these could be reshuffled so
+        # the module could appear in sequence of buckets two times.
+        assert num_modules <= num_module_switches <= num_modules + 1
 
 
 @pytest.mark.parametrize('mode', ['class', 'module', 'package', 'global'])
