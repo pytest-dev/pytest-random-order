@@ -1,6 +1,9 @@
 pytest-random-order
 ===================================
 
+.. image:: https://travis-ci.org/jbasko/pytest-random-order.svg?branch=master
+    :target: https://travis-ci.org/jbasko/pytest-random-order
+
 This is a pytest plugin **to randomise the order** in which tests are run **with some control**
 over how much randomness one allows.
 

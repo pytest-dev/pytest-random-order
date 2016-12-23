@@ -20,7 +20,7 @@ setup(
     maintainer_email='jazeps.basko@gmail.com',
     license='MIT',
     url='https://github.com/jbasko/pytest-random-order',
-    description='Randomise the order in which tests are run',
+    description='Randomise the order in which pytest tests are run with some control over the randomness',
     long_description=read('README.rst'),
     py_modules=['pytest_random_order'],
     install_requires=['pytest>=2.9.2'],
