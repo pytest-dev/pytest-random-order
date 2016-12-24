@@ -131,8 +131,7 @@ def pytest_collection_modifyitems(session, config, items):
         _shuffle_items(items, key=_random_order_item_keys[bucket_type], disable=_disable)
 
     except Exception as e:
-        # If the number of items is still the same, we assume that we haven't messed up too hard
-        # and we can just return the list of items as it is.
+        # See the finally block -- we only fail if we have lost user's tests.
         _, _, exc_tb = sys.exc_info()
         failure = 'pytest-random-order plugin has failed with {!r}:\n{}'.format(
             e, ''.join(traceback.format_tb(exc_tb, 10))
