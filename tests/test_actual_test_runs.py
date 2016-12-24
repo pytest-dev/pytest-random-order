@@ -5,26 +5,6 @@ import py
 import pytest
 
 
-Call = collections.namedtuple('Call', field_names=('package', 'module', 'cls', 'name'))
-
-
-def get_runtest_call_sequence(result):
-    """
-    Returns a tuple of names of test methods that were run
-    in the order they were run.
-    """
-    calls = []
-
-    for c in result.reprec.getcalls('pytest_runtest_call'):
-        calls.append(Call(
-            package=c.item.module.__package__,
-            module=c.item.module.__name__,
-            cls=(c.item.module.__name__, c.item.cls.__name__) if c.item.cls else None,
-            name=c.item.name,
-        ))
-    return tuple(calls)
-
-
 @pytest.fixture
 def tmp_tree_of_tests(testdir):
     """
@@ -156,13 +136,13 @@ def check_call_sequence(seq, bucket='module'):
 
 
 @pytest.mark.parametrize('bucket', ['class', 'module', 'package', 'global'])
-def test_it_works_with_actual_tests(tmp_tree_of_tests, bucket):
+def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket):
     sequences = set()
 
     for x in range(5):
         result = tmp_tree_of_tests.runpytest('--random-order-bucket={}'.format(bucket), '--verbose')
         result.assert_outcomes(passed=14, failed=3)
-        seq = get_runtest_call_sequence(result)
+        seq = get_test_calls(result)
         check_call_sequence(seq, bucket=bucket)
         assert len(seq) == 17
         sequences.add(seq)
