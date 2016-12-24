@@ -1,7 +1,7 @@
 import pytest
 
 
-from pytest_random_order import _shuffle_items
+from pytest_random_order.shuffler import _shuffle_items
 
 
 def identity_key(x):

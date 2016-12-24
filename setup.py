@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-random-order',
-    version='0.3.1',
+    version='0.4.0',
     author='Jazeps Basko',
     author_email='jazeps.basko@gmail.com',
     maintainer='Jazeps Basko',
@@ -22,7 +22,7 @@ setup(
     url='https://github.com/jbasko/pytest-random-order',
     description='Randomise the order in which pytest tests are run with some control over the randomness',
     long_description=read('README.rst'),
-    py_modules=['pytest_random_order'],
+    py_modules=['pytest_random_order.plugin', 'pytest_random_order.shuffler'],
     install_requires=['pytest>=2.9.2'],
     classifiers=[
         'Development Status :: 4 - Beta',
@@ -38,7 +38,7 @@ setup(
     ],
     entry_points={
         'pytest11': [
-            'random-order = pytest_random_order',
+            'random-order = pytest_random_order.plugin',
         ],
     },
 )

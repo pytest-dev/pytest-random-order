@@ -30,7 +30,7 @@ def simple_testdir(testdir):
 
 
 def test_faulty_shuffle_that_preserves_items_does_not_fail_test_run(monkeypatch, simple_testdir):
-    monkeypatch.setattr('pytest_random_order._shuffle_items', acceptably_failing_shuffle_items)
+    monkeypatch.setattr('pytest_random_order.plugin._shuffle_items', acceptably_failing_shuffle_items)
 
     result = simple_testdir.runpytest()
     result.assert_outcomes(passed=2)
@@ -40,7 +40,7 @@ def test_faulty_shuffle_that_preserves_items_does_not_fail_test_run(monkeypatch,
 
 
 def test_faulty_shuffle_that_loses_items_fails_test_run(monkeypatch, simple_testdir):
-    monkeypatch.setattr('pytest_random_order._shuffle_items', critically_failing_shuffle_items)
+    monkeypatch.setattr('pytest_random_order.plugin._shuffle_items', critically_failing_shuffle_items)
     result = simple_testdir.runpytest()
     result.assert_outcomes(passed=0, failed=0, skipped=0)
     result.stdout.fnmatch_lines("""
@@ -49,7 +49,7 @@ def test_faulty_shuffle_that_loses_items_fails_test_run(monkeypatch, simple_test
 
 
 def test_seemingly_ok_shuffle_that_loses_items_fails_test_run(monkeypatch, simple_testdir):
-    monkeypatch.setattr('pytest_random_order._shuffle_items', critically_not_failing_shuffle_items)
+    monkeypatch.setattr('pytest_random_order.plugin._shuffle_items', critically_not_failing_shuffle_items)
     result = simple_testdir.runpytest()
     result.assert_outcomes(passed=0, failed=0, skipped=0)
     result.stdout.fnmatch_lines("""
