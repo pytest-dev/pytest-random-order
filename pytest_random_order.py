@@ -118,7 +118,8 @@ def _disable(item):
             # even when the bucket type for this test run is say package or global.
             return item.module.__name__
     except AttributeError:
-        return False
+        pass
+    return False
 
 
 def pytest_collection_modifyitems(session, config, items):
