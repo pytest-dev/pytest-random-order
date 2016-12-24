@@ -7,21 +7,29 @@ pytest-random-order
 This is a pytest plugin **to randomise the order** in which tests are run **with some control**
 over how much randomness one allows.
 
-It is a good idea to randomise the order in which your tests run
-because a test running early as part of a larger suite of tests may have left
+Why?
+----
+
+It is a good idea to shuffle the order in which your tests run
+because a test running early as part of a larger test suite may be leaving
 the system under test in a particularly fortunate state for a subsequent test to pass.
 
-How Random
-----------
+How?
+----
 
 **pytest-random-order** groups tests in buckets, shuffles them within buckets and then shuffles the buckets.
 
 You can choose from four types of buckets:
 
-    * ``class``
-    * ``module`` - **this is the default setting**
-    * ``package``
-    * ``global`` - all tests fall in the same bucket, full randomness, tests probably take longer to run
+``class``
+
+``module``
+    the default setting
+
+``package``
+
+``global``
+    all tests fall in the same bucket, full randomness, tests probably take longer to run
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
 then here are just two of many potential orderings that non-global randomisation can produce:
@@ -43,6 +51,9 @@ By default, your tests will be randomised at ``module`` level which means that
 tests within a single module X will be executed in no particular order, but tests from
 other modules will not be mixed in between tests of module X.
 
+The plugin also supports **disabling shuffle on module basis** irrespective of the bucket type
+chosen for the test run. See Advanced Options below.
+
 ----
 
 Installation
@@ -56,7 +67,8 @@ Installation
 Usage
 -----
 
-The plugin is enabled by default. To randomise the order of tests within modules, just run pytest as always:
+The plugin **is enabled by default**.
+To randomise the order of tests within modules, just run pytest as always:
 
 ::
 
@@ -86,6 +98,27 @@ pass undeservedly, you can disable it:
 
     $ pytest -p no:random-order -v
 
+
+Advanced Options
+----------------
+
+Disable Shuffling In a Module
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can disable shuffling of tests within a single module by placing a pytest marker in the module:
+
+::
+
+    pytest.mark.random_order_disabled = True
+
+    def test_number_one():
+        pass
+
+    def test_number_two():
+        pass
+
+No matter what will be the bucket type for the test run, ``test_number_one`` will always run
+before ``test_number_two``.
 
 License
 -------
