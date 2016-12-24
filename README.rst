@@ -21,15 +21,21 @@ How?
 
 You can choose from four types of buckets:
 
-``class``
+class
+    Tests from one class will never have tests from other classes or modules run in-between them.
 
-``module``
-    the default setting
+module
+    Tests will be shuffled within a module and modules will be shuffled, but tests from one module
+    will never be separated by tests from other modules.
+    **This is the default setting**.
 
-``package``
+package
+    Same as above, but for package level. Note that modules (and hence tests inside those modules) that
+    belong to package ``x.y.z`` do not belong to package ``x.y``, so they will fall in different buckets
+    when randomising with ``package`` bucket type.
 
-``global``
-    all tests fall in the same bucket, full randomness, tests probably take longer to run
+global
+    All tests fall in the same bucket, full randomness, tests probably take longer to run.
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
 then here are just two of many potential orderings that non-global randomisation can produce:
@@ -43,9 +49,6 @@ then here are just two of many potential orderings that non-global randomisation
 As you can see, all C tests are executed "next" to each other and so are tests in buckets A and B.
 Tests from any bucket X are guaranteed to not be interspersed with tests from another bucket Y.
 For example, if you choose bucket type ``module`` then bucket X contains all tests that are in this module.
-
-Note that modules (and hence tests inside those modules) that belong to package ``x.y.z`` do not belong
-to package ``x.y``, so they will fall in different buckets when randomising with ``package`` bucket type.
 
 By default, your tests will be randomised at ``module`` level which means that
 tests within a single module X will be executed in no particular order, but tests from
