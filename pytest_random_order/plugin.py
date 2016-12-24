@@ -33,7 +33,7 @@ def pytest_collection_modifyitems(session, config, items):
 
     try:
         bucket_type = config.getoption('random_order_bucket')
-        _shuffle_items(items, key=_random_order_item_keys[bucket_type], disable=_disable)
+        _shuffle_items(items, bucket_key=_random_order_item_keys[bucket_type], disable=_disable)
 
     except Exception as e:
         # See the finally block -- we only fail if we have lost user's tests.

@@ -9,7 +9,7 @@ def twenty_tests():
     return ''.join(code)
 
 
-@pytest.mark.parametrize('disabled', [True, False])
+@pytest.mark.parametrize('disabled', [True])
 def test_pytest_mark_random_order_disabled(testdir, twenty_tests, get_test_calls, disabled):
     testdir.makepyfile(
         'import pytest\n' +
