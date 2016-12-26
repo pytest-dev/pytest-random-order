@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import collections
+import re
 
 import py
 import pytest
@@ -148,3 +149,52 @@ def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket):
         sequences.add(seq)
 
     assert 1 < len(sequences) <= 5
+
+
+def test_random_order_seed_is_respected(testdir, twenty_tests, get_test_calls):
+    testdir.makepyfile(twenty_tests)
+    call_sequences = {
+        '1': None,
+        '2': None,
+        '3': None,
+    }
+    for seed in call_sequences.keys():
+        result = testdir.runpytest('--random-order-seed={}'.format(seed))
+
+        result.stdout.fnmatch_lines([
+            '*Using --random-order-seed={}*'.format(seed),
+        ])
+
+        result.assert_outcomes(passed=20)
+        call_sequences[seed] = get_test_calls(result)
+
+    for seed in call_sequences.keys():
+        result = testdir.runpytest('--random-order-seed={}'.format(seed))
+        result.assert_outcomes(passed=20)
+        assert call_sequences[seed] == get_test_calls(result)
+
+    assert call_sequences['1'] != call_sequences['2'] != call_sequences['3']
+
+
+def test_generated_seed_is_reported_and_run_can_be_reproduced(testdir, twenty_tests, get_test_calls):
+    testdir.makepyfile(twenty_tests)
+    result = testdir.runpytest('-v')
+    result.assert_outcomes(passed=20)
+    result.stdout.fnmatch_lines([
+        '*Using --random-order-seed=*'
+    ])
+    calls = get_test_calls(result)
+
+    # find the seed in output
+    seed = None
+    for line in result.outlines:
+        g = re.match('^Using --random-order-seed=(.+)$', line)
+        if g:
+            seed = g.group(1)
+            break
+    assert seed
+
+    result2 = testdir.runpytest('-v', '--random-order-seed={}'.format(seed))
+    result2.assert_outcomes(passed=20)
+    calls2 = get_test_calls(result2)
+    assert calls == calls2

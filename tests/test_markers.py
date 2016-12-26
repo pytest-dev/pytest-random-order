@@ -1,22 +1,6 @@
 import pytest
 
 
-@pytest.fixture
-def twenty_tests():
-    code = []
-    for i in range(20):
-        code.append('def test_a{}(): assert True\n'.format(str(i).zfill(2)))
-    return ''.join(code)
-
-
-@pytest.fixture
-def twenty_cls_tests():
-    code = []
-    for i in range(20):
-        code.append('\tdef test_b{}(self): self.assertTrue\n'.format(str(i).zfill(2)))
-    return ''.join(code)
-
-
 @pytest.mark.parametrize('disabled', [True, False])
 def test_marker_disables_random_order_in_module(testdir, twenty_tests, get_test_calls, disabled):
     testdir.makepyfile(
