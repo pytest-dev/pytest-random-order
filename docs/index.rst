@@ -1,12 +1,13 @@
-pytest-random-order
-===================================
 
-.. image:: https://travis-ci.org/jbasko/pytest-random-order.svg?branch=master
-    :target: https://travis-ci.org/jbasko/pytest-random-order
+Welcome to pytest-random-order
+==============================
 
 pytest-random-order is a plugin for `pytest <http://pytest.org>`_ that randomises the order in which
 tests are run to reveal unwanted coupling between tests. The plugin allows user to control the level
 of randomness they want to introduce and to disable reordering on subsets of tests.
+
+.. toctree::
+    :maxdepth: 2
 
 
 Quick Start
@@ -127,7 +128,3 @@ pass undeservedly, you can disable it:
 
     $ pytest -p no:random-order -v
 
-License
--------
-
-Distributed under the terms of the MIT license, "pytest-random-order" is free and open source software
