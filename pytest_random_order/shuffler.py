@@ -19,7 +19,7 @@ ItemKey = collections.namedtuple('ItemKey', field_names=('bucket', 'disabled', '
 ItemKey.__new__.__defaults__ = (None, None)
 
 
-def _shuffle_items(items, bucket_key=None, disable=None, _shuffle_buckets=True):
+def _shuffle_items(items, bucket_key=None, disable=None, seed=None):
     """
     Shuffles a list of `items` in place.
 
@@ -31,25 +31,14 @@ def _shuffle_items(items, bucket_key=None, disable=None, _shuffle_buckets=True):
     Bucket defines the boundaries across which items will not
     be shuffled.
 
-    If `disable` is function and returns True for ALL items
-    in a bucket, items in this bucket will remain in their original order.
-
-    `_shuffle_buckets` is for testing only. Setting it to False may not produce
-    the outcome you'd expect in all scenarios because if two non-contiguous sections of items belong
-    to the same bucket, the items in these sections will be reshuffled as if they all belonged
-    to the first section.
-        Example:
-            [A1, A2, B1, B2, A3, A4]
-
-            where letter denotes bucket key,
-            with _shuffle_buckets=False may be reshuffled to:
-                [B2, B1, A3, A1, A4, A2]
-
-            or as well to:
-                [A3, A2, A4, A1, B1, B2]
-
-            because all A's belong to the same bucket and will be grouped together.
+    `disable` is a function that takes an item and returns a falsey value
+    if this item is ok to be shuffled. It returns a truthy value otherwise and
+    the truthy value is used as part of the item's key when determining the bucket
+    it belongs to.
     """
+
+    if seed is not None:
+        random.seed(seed)
 
     # If `bucket_key` is falsey, shuffle is global.
     if not bucket_key and not disable:

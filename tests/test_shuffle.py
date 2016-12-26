@@ -130,3 +130,19 @@ def test_shuffle_respects_two_distinct_disabled_groups_in_one_bucket():
             return
 
     assert False
+
+
+def test_shuffle_respects_seed():
+    sorted_items = list(range(30))
+
+    for seed in range(20):
+        # Reset
+        items1 = list(range(30))
+        _shuffle_items(items1, seed=seed)
+
+        assert items1 != sorted_items
+
+        items2 = list(range(30))
+        _shuffle_items(items2, seed=seed)
+
+        assert items2 == items1

@@ -31,3 +31,19 @@ def get_test_calls():
     Returns a function to get runtest calls out from testdir.pytestrun result object.
     """
     return _get_test_calls
+
+
+@pytest.fixture
+def twenty_tests():
+    code = []
+    for i in range(20):
+        code.append('def test_a{}(): assert True\n'.format(str(i).zfill(2)))
+    return ''.join(code)
+
+
+@pytest.fixture
+def twenty_cls_tests():
+    code = []
+    for i in range(20):
+        code.append('\tdef test_b{}(self): self.assertTrue\n'.format(str(i).zfill(2)))
+    return ''.join(code)

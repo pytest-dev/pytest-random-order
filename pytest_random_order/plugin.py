@@ -1,3 +1,4 @@
+import random
 import sys
 import traceback
 
@@ -14,18 +15,34 @@ def pytest_addoption(parser):
         choices=('global', 'package', 'module', 'class'),
         help='Limit reordering of test items across units of code',
     )
+    group.addoption(
+        '--random-order-seed',
+        action='store',
+        dest='random_order_seed',
+        default=None,
+        help='Seed for the test order randomiser to produce a random order that can be reproduced using this seed',
+    )
 
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "random_order(disabled=True): disable reordering of tests within a module or class")
 
+    if config.getoption('random_order_seed'):
+        seed = str(config.getoption('random_order_seed'))
+    else:
+        seed = str(random.randint(1, 1000000))
+    config.random_order_seed = seed
+
 
 def pytest_report_header(config):
-    out = None
+    out = ''
 
     if config.getoption('random_order_bucket'):
         bucket = config.getoption('random_order_bucket')
-        out = "Using --random-order-bucket={0}".format(bucket)
+        out += "Using --random-order-bucket={}\n".format(bucket)
+
+    if hasattr(config, 'random_order_seed'):
+        out += 'Using --random-order-seed={}\n'.format(getattr(config, 'random_order_seed'))
 
     return out
 
@@ -36,8 +53,9 @@ def pytest_collection_modifyitems(session, config, items):
     item_ids = _get_set_of_item_ids(items)
 
     try:
+        seed = getattr(config, 'random_order_seed', None)
         bucket_type = config.getoption('random_order_bucket')
-        _shuffle_items(items, bucket_key=_random_order_item_keys[bucket_type], disable=_disable)
+        _shuffle_items(items, bucket_key=_random_order_item_keys[bucket_type], disable=_disable, seed=seed)
 
     except Exception as e:
         # See the finally block -- we only fail if we have lost user's tests.
