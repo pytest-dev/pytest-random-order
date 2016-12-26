@@ -102,11 +102,8 @@ pass undeservedly, you can disable it:
     $ pytest -p no:random-order -v
 
 
-Advanced Options
-----------------
-
-Disable Shuffling In a Module
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Disable Shuffling in a Module/Class
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can disable shuffling of tests within a single module or class by marking the module or class
 with ``random_order`` marker and passing ``disabled=True`` to it:
