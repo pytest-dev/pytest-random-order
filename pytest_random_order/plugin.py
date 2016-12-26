@@ -16,6 +16,10 @@ def pytest_addoption(parser):
     )
 
 
+def pytest_configure(config):
+    config.addinivalue_line("markers", "random_order(disabled=True): disable reordering of tests within a module or class")
+
+
 def pytest_report_header(config):
     out = None
 
