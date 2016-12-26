@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-random-order',
-    version='0.4.3',
+    version='0.5.0',
     author='Jazeps Basko',
     author_email='jazeps.basko@gmail.com',
     maintainer='Jazeps Basko',

@@ -108,17 +108,27 @@ Advanced Options
 Disable Shuffling In a Module
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can disable shuffling of tests within a single module by placing a pytest marker in the module:
+You can disable shuffling of tests within a single module or class by marking the module or class
+with ``random_order`` marker and passing ``disabled=True`` to it:
 
 ::
 
-    pytest.mark.random_order_disabled = True
+    pytestmark = pytest.mark.random_order(disabled=True)
 
     def test_number_one():
-        pass
+        assert True
 
     def test_number_two():
-        pass
+        assert True
+
+::
+
+    class MyTest(TestCase):
+        pytestmark = pytest.mark.random_order(disabled=True)
+
+        def test_number_one(self):
+            self.assertTrue(True)
+
 
 No matter what will be the bucket type for the test run, ``test_number_one`` will always run
 before ``test_number_two``.

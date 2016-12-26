@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import collections
-import operator
 import random
 
 
@@ -97,19 +96,12 @@ def _get_set_of_item_ids(items):
         return s
 
 
-_is_random_order_disabled = operator.attrgetter('pytest.mark.random_order_disabled')
-
-
 def _disable(item):
-    try:
-        # In actual test runs, this is returned as a truthy instance of MarkDecorator even when you don't have
-        # set the marker. This is a hack.
-        is_disabled = _is_random_order_disabled(item.module)
-        if is_disabled and is_disabled is True:
-            # It is not enough to return just True because in case the shuffling
-            # is disabled on module, we must preserve the module unchanged
-            # even when the bucket type for this test run is say package or global.
-            return item.module.__name__
-    except AttributeError:
-        pass
+    marker = item.get_marker('random_order')
+    if marker:
+        is_disabled = marker.kwargs.get('disabled', False)
+        if is_disabled:
+            # A test item can only be disabled in its parent context -- where it is part of some order.
+            # We use parent name as the key so that all children of the same parent get the same disabled key.
+            return item.parent.name
     return False
