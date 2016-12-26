@@ -6,3 +6,12 @@ def test_help_message(testdir):
         'random-order:',
         '*--random-order-bucket={global,package,module,class}*',
     ])
+
+
+def test_markers_message(testdir):
+    result = testdir.runpytest(
+        '--markers',
+    )
+    result.stdout.fnmatch_lines([
+        '*@pytest.mark.random_order(disabled=True): disable reordering*',
+    ])
