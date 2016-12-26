@@ -5,7 +5,7 @@ pytest-random-order
     :target: https://travis-ci.org/jbasko/pytest-random-order
 
 pytest-random-order is a plugin for `pytest <http://pytest.org>`_ that randomises the order in which
-tests are run to reveal unwanted coupling between tests. It allows user to control the level
+tests are run to reveal unwanted coupling between tests. The plugin user to control the level
 of randomness they want to introduce and to disable reordering on subsets of tests.
 Tests can be rerun in a specific order by passing a seed value reported in a previous test run.
 

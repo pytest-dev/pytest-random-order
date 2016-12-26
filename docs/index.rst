@@ -5,6 +5,7 @@ Welcome to pytest-random-order
 pytest-random-order is a plugin for `pytest <http://pytest.org>`_ that randomises the order in which
 tests are run to reveal unwanted coupling between tests. The plugin allows user to control the level
 of randomness they want to introduce and to disable reordering on subsets of tests.
+Tests can be rerun in a specific order by passing a seed value reported in a previous test run.
 
 .. toctree::
     :maxdepth: 2
@@ -36,6 +37,13 @@ To disable reordering of tests in a module or class, use pytest marker notation:
 ::
 
     pytestmark = pytest.mark.random_order(disabled=True)
+
+To rerun tests in a particular order:
+
+::
+
+    $ pytest -v --random-order-seed=<value-reported-in-previous-run>
+
 
 Design
 ------
@@ -116,6 +124,28 @@ with ``random_order`` marker and passing ``disabled=True`` to it:
 
 No matter what will be the bucket type for the test run, ``test_number_one`` will always run
 before ``test_number_two``.
+
+
+Rerun Tests in the Same Order (Same Seed)
++++++++++++++++++++++++++++++++++++++++++
+
+If you discover a failing test because you reordered tests, you will probably want to be able to rerun the tests
+in the same failing order. To allow reproducing test order, the plugin reports the seed value it used with pseudo random number
+generator:
+
+::
+
+    ============================= test session starts ==============================
+    ..
+    Using --random-order-bucket=module
+    Using --random-order-seed=24775
+    ...
+
+You can now the ``--random-order-seed=...`` bit as an argument to the next run to produce the same order:
+
+::
+
+    $ pytest -v --random-order-seed=24775
 
 
 Disable the Plugin
