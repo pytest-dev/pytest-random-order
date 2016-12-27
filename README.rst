@@ -1,6 +1,12 @@
 pytest-random-order
 ===================================
 
+.. image:: https://img.shields.io/badge/python-2.7%2C%203.5-blue.svg
+    :target: https://github.com/jbasko/pytest-random-order
+
+.. image:: https://coveralls.io/repos/github/jbasko/pytest-random-order/badge.svg?branch=master
+    :target: https://coveralls.io/github/jbasko/pytest-random-order?branch=master
+
 .. image:: https://travis-ci.org/jbasko/pytest-random-order.svg?branch=master
     :target: https://travis-ci.org/jbasko/pytest-random-order
 
@@ -140,7 +146,7 @@ generator:
     Using --random-order-seed=24775
     ...
 
-You can now the ``--random-order-seed=...`` bit as an argument to the next run to produce the same order:
+You can now use the ``--random-order-seed=...`` bit as an argument to the next run to produce the same order:
 
 ::
 

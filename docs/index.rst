@@ -141,7 +141,7 @@ generator:
     Using --random-order-seed=24775
     ...
 
-You can now the ``--random-order-seed=...`` bit as an argument to the next run to produce the same order:
+You can now use the ``--random-order-seed=...`` bit as an argument to the next run to produce the same order:
 
 ::
 
