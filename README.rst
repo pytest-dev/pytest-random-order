@@ -4,8 +4,8 @@ pytest-random-order
 .. image:: https://img.shields.io/badge/python-2.7%2C%203.5-blue.svg
     :target: https://github.com/jbasko/pytest-random-order
 
-.. image:: https://coveralls.io/repos/github/jbasko/pytest-random-order/badge.svg?branch=master
-    :target: https://coveralls.io/github/jbasko/pytest-random-order?branch=master
+.. image:: https://img.shields.io/badge/coverage-98%25-green.svg
+    :target: https://github.com/jbasko/pytest-random-order
 
 .. image:: https://travis-ci.org/jbasko/pytest-random-order.svg?branch=master
     :target: https://travis-ci.org/jbasko/pytest-random-order
