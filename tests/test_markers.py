@@ -5,7 +5,7 @@ import pytest
 def test_marker_disables_random_order_in_module(testdir, twenty_tests, get_test_calls, disabled):
     testdir.makepyfile(
         'import pytest\n' +
-        ('pytestmark = pytest.mark.random_order(disabled={})\n'.format(disabled)) +
+        ('pytestmark = pytest.mark.random_order(disabled={0})\n'.format(disabled)) +
         twenty_tests
     )
 
@@ -26,7 +26,7 @@ def test_marker_disables_random_order_in_class(testdir, twenty_cls_tests, get_te
         'import pytest\n\n' +
         'from unittest import TestCase\n\n' +
         'class MyTest(TestCase):\n' +
-        '\tpytestmark = pytest.mark.random_order(disabled={})\n'.format(disabled) +
+        '\tpytestmark = pytest.mark.random_order(disabled={0})\n'.format(disabled) +
         twenty_cls_tests + '\n'
     )
 

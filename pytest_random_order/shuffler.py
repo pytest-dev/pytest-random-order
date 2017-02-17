@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import collections
+from collections import namedtuple
+try:
+    from collections import OrderedDict
+except ImportError:
+    from ordereddict import OrderedDict
 import random
 
 
@@ -15,7 +19,7 @@ In some cases it is important for the `disabled` to be more than just True in or
 to preserve a distinct disabled sub-bucket within a larger bucket and not mix it up with another
 disabled sub-bucket of the same larger bucket.
 """
-ItemKey = collections.namedtuple('ItemKey', field_names=('bucket', 'disabled', 'x'))
+ItemKey = namedtuple('ItemKey', field_names=('bucket', 'disabled', 'x'))
 ItemKey.__new__.__defaults__ = (None, None)
 
 
@@ -57,7 +61,7 @@ def _shuffle_items(items, bucket_key=None, disable=None, seed=None):
     # For a sequence of items A1, A2, B1, B2, C1, C2,
     # where key(A1) == key(A2) == key(C1) == key(C2),
     # items A1, A2, C1, and C2 will end up in the same bucket.
-    buckets = collections.OrderedDict()
+    buckets = OrderedDict()
     for item in items:
         full_bucket_key = get_full_bucket_key(item)
         if full_bucket_key not in buckets:

@@ -141,7 +141,7 @@ def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket):
     sequences = set()
 
     for x in range(5):
-        result = tmp_tree_of_tests.runpytest('--random-order-bucket={}'.format(bucket), '--verbose')
+        result = tmp_tree_of_tests.runpytest('--random-order-bucket={0}'.format(bucket), '--verbose')
         result.assert_outcomes(passed=14, failed=3)
         seq = get_test_calls(result)
         check_call_sequence(seq, bucket=bucket)
@@ -159,17 +159,17 @@ def test_random_order_seed_is_respected(testdir, twenty_tests, get_test_calls):
         '3': None,
     }
     for seed in call_sequences.keys():
-        result = testdir.runpytest('--random-order-seed={}'.format(seed))
+        result = testdir.runpytest('--random-order-seed={0}'.format(seed))
 
         result.stdout.fnmatch_lines([
-            '*Using --random-order-seed={}*'.format(seed),
+            '*Using --random-order-seed={0}*'.format(seed),
         ])
 
         result.assert_outcomes(passed=20)
         call_sequences[seed] = get_test_calls(result)
 
     for seed in call_sequences.keys():
-        result = testdir.runpytest('--random-order-seed={}'.format(seed))
+        result = testdir.runpytest('--random-order-seed={0}'.format(seed))
         result.assert_outcomes(passed=20)
         assert call_sequences[seed] == get_test_calls(result)
 
@@ -194,7 +194,7 @@ def test_generated_seed_is_reported_and_run_can_be_reproduced(testdir, twenty_te
             break
     assert seed
 
-    result2 = testdir.runpytest('-v', '--random-order-seed={}'.format(seed))
+    result2 = testdir.runpytest('-v', '--random-order-seed={0}'.format(seed))
     result2.assert_outcomes(passed=20)
     calls2 = get_test_calls(result2)
     assert calls == calls2
