@@ -1,7 +1,7 @@
 pytest-random-order
 ===================================
 
-.. image:: https://img.shields.io/badge/python-2.7%2C%203.5-blue.svg
+.. image:: https://img.shields.io/badge/python-2.6%2C%202.7%2C%203.5-blue.svg
     :target: https://github.com/jbasko/pytest-random-order
 
 .. image:: https://img.shields.io/badge/coverage-98%25-green.svg

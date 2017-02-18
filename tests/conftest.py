@@ -37,7 +37,7 @@ def get_test_calls():
 def twenty_tests():
     code = []
     for i in range(20):
-        code.append('def test_a{}(): assert True\n'.format(str(i).zfill(2)))
+        code.append('def test_a{0}(): assert True\n'.format(str(i).zfill(2)))
     return ''.join(code)
 
 
@@ -45,5 +45,5 @@ def twenty_tests():
 def twenty_cls_tests():
     code = []
     for i in range(20):
-        code.append('\tdef test_b{}(self): self.assertTrue\n'.format(str(i).zfill(2)))
+        code.append('\tdef test_b{0}(self): self.assertTrue\n'.format(str(i).zfill(2)))
     return ''.join(code)

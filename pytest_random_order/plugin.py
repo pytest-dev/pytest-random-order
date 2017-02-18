@@ -39,10 +39,10 @@ def pytest_report_header(config):
 
     if config.getoption('random_order_bucket'):
         bucket = config.getoption('random_order_bucket')
-        out += "Using --random-order-bucket={}\n".format(bucket)
+        out += "Using --random-order-bucket={0}\n".format(bucket)
 
     if hasattr(config, 'random_order_seed'):
-        out += 'Using --random-order-seed={}\n'.format(getattr(config, 'random_order_seed'))
+        out += 'Using --random-order-seed={0}\n'.format(getattr(config, 'random_order_seed'))
 
     return out
 
@@ -60,7 +60,7 @@ def pytest_collection_modifyitems(session, config, items):
     except Exception as e:
         # See the finally block -- we only fail if we have lost user's tests.
         _, _, exc_tb = sys.exc_info()
-        failure = 'pytest-random-order plugin has failed with {!r}:\n{}'.format(
+        failure = 'pytest-random-order plugin has failed with {0!r}:\n{1}'.format(
             e, ''.join(traceback.format_tb(exc_tb, 10))
         )
         config.warn(0, failure, None)
