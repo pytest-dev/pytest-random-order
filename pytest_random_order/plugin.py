@@ -8,6 +8,12 @@ from pytest_random_order.shuffler import _get_set_of_item_ids, _shuffle_items, _
 def pytest_addoption(parser):
     group = parser.getgroup('random-order')
     group.addoption(
+        '--random-order-enable',
+        action="store_true",
+        dest="random_order_enable",
+        default=False,
+        help="randomize the tests to be run. defaults to False.")
+    group.addoption(
         '--random-order-bucket',
         action='store',
         dest='random_order_bucket',
@@ -35,19 +41,23 @@ def pytest_configure(config):
 
 
 def pytest_report_header(config):
-    out = ''
+    if config.getoption('random_order_enable'):
+        out = ''
 
-    if config.getoption('random_order_bucket'):
-        bucket = config.getoption('random_order_bucket')
-        out += "Using --random-order-bucket={0}\n".format(bucket)
+        if config.getoption('random_order_bucket'):
+            bucket = config.getoption('random_order_bucket')
+            out += "Using --random-order-bucket={0}\n".format(bucket)
 
-    if hasattr(config, 'random_order_seed'):
-        out += 'Using --random-order-seed={0}\n'.format(getattr(config, 'random_order_seed'))
+        if hasattr(config, 'random_order_seed'):
+            out += 'Using --random-order-seed={0}\n'.format(getattr(config, 'random_order_seed'))
 
-    return out
+        return out
 
 
 def pytest_collection_modifyitems(session, config, items):
+    if not config.getoption('random_order_enable'):
+        return
+
     failure = None
 
     item_ids = _get_set_of_item_ids(items)
