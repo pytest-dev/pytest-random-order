@@ -23,8 +23,24 @@ Quick Start
 
     $ pip install pytest-random-order
 
-The plugin **is enabled by default**. To randomise the order of tests within modules and shuffle the order of
-test modules (which is the default behaviour of the plugin), just run pytest as always:
+The plugin is **not enabled by default**. You need to include the parameter:
+
+::
+
+    $ pytest --random-order-enable
+
+If you want to enable it by default, ``pytest`` offers
+`ways to include arguments on every run <http://doc.pytest.org/en/latest/customize.html#adding-default-options>`_,
+for example inside your ``pytest.ini`` file:
+
+::
+
+    [pytest]
+    addopts= --random-order-enable
+
+
+After adding the ``random-order-enable`` argument by default, you can randomise the order of tests within modules and
+shuffle the order of test modules (which is the default behaviour of the plugin), just running pytest as always:
 
 ::
 
