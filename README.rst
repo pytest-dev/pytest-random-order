@@ -163,6 +163,11 @@ pass undeservedly, you can disable it:
 
     $ pytest -p no:random-order -v
 
+Thanks
+++++++
+
+Thanks **Raul Gallegos** (eLRuLL) for adding Python 2.6 support.
+
 License
 -------
 
