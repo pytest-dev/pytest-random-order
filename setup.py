@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-random-order',
-    version='0.5.4',
+    version='0.5.5',
     author='Jazeps Basko',
     author_email='jazeps.basko@gmail.com',
     maintainer='Jazeps Basko',
@@ -25,7 +25,7 @@ setup(
     py_modules=['pytest_random_order.plugin', 'pytest_random_order.shuffler'],
     install_requires=['pytest>=2.9.2'],
     classifiers=[
-        'Development Status :: 4 - Beta',
+        'Development Status :: 5 - Production/Stable',
         'Framework :: Pytest',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Testing',

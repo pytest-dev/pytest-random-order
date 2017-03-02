@@ -9,9 +9,9 @@ def test_marker_disables_random_order_in_module(testdir, twenty_tests, get_test_
         twenty_tests
     )
 
-    result = testdir.runpytest('--random-order-bucket=module', '-v')
+    result = testdir.runpytest('-v')
     result.assert_outcomes(passed=20)
-    names = [c.name for c in get_test_calls(testdir.runpytest())]
+    names = [c.name for c in get_test_calls(result)]
     sorted_names = sorted(list(names))
 
     if disabled:
@@ -30,9 +30,9 @@ def test_marker_disables_random_order_in_class(testdir, twenty_cls_tests, get_te
         twenty_cls_tests + '\n'
     )
 
-    result = testdir.runpytest('--random-order-bucket=module', '-v')
+    result = testdir.runpytest('-v')
     result.assert_outcomes(passed=20)
-    names = [c.name for c in get_test_calls(testdir.runpytest())]
+    names = [c.name for c in get_test_calls(result)]
     sorted_names = sorted(list(names))
 
     if disabled:
