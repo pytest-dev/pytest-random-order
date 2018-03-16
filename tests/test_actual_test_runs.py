@@ -136,8 +136,14 @@ def check_call_sequence(seq, bucket='module'):
         assert num_modules <= num_module_switches <= num_modules + 1
 
 
-@pytest.mark.parametrize('bucket', ['class', 'module', 'package', 'global'])
-def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket):
+@pytest.mark.parametrize('bucket,min_sequences,max_sequences', [
+    ('class', 2, 5),
+    ('module', 2, 5),
+    ('package', 2, 5),
+    ('global', 2, 5),
+    ('none', 1, 1),
+])
+def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket, min_sequences, max_sequences):
     sequences = set()
 
     for x in range(5):
@@ -148,7 +154,7 @@ def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket):
         assert len(seq) == 17
         sequences.add(seq)
 
-    assert 1 < len(sequences) <= 5
+    assert min_sequences <= len(sequences) <= max_sequences
 
 
 def test_random_order_seed_is_respected(testdir, twenty_tests, get_test_calls):
