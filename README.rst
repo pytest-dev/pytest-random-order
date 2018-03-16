@@ -31,7 +31,7 @@ test modules (which is the default behaviour of the plugin), just run pytest as 
     $ pytest -v
 
 To change the level of randomness allowed, run pytest with ``--random-order-bucket=<bucket-type>`` option
-where ``<bucket-type>`` can be ``class``, ``module``, ``package``, or ``global``:
+where ``<bucket-type>`` can be ``class``, ``module``, ``package``, ``global``, or ``none``:
 
 ::
 
@@ -71,6 +71,9 @@ package
 
 global
     All tests fall in the same bucket, full randomness, tests probably take longer to run.
+
+none
+    Disable shuffling.
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
 then one of many potential orderings that non-global randomisation can produce could be:
@@ -153,8 +156,8 @@ You can now use the ``--random-order-seed=...`` bit as an argument to the next r
     $ pytest -v --random-order-seed=24775
 
 
-Disable the Plugin
-++++++++++++++++++
+Disable Randomisation or the Plugin
++++++++++++++++++++++++++++++++++++
 
 If the plugin misbehaves or you just want to assure yourself that it is not the plugin making your tests fail or
 pass undeservedly, you can disable it:
@@ -163,12 +166,9 @@ pass undeservedly, you can disable it:
 
     $ pytest -p no:random-order -v
 
-Thanks
-++++++
+To disable just the shuffling, but let the plugin exist:
 
-Thanks **Raul Gallegos** (eLRuLL) for adding Python 2.6 support.
+::
 
-License
--------
+    $ pytest --random-order-bucket=none
 
-Distributed under the terms of the MIT license, "pytest-random-order" is free and open source software
