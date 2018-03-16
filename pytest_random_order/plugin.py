@@ -12,7 +12,7 @@ def pytest_addoption(parser):
         action='store',
         dest='random_order_bucket',
         default='module',
-        choices=('global', 'package', 'module', 'class'),
+        choices=('global', 'package', 'module', 'class', 'none'),
         help='Limit reordering of test items across units of code',
     )
     group.addoption(
@@ -55,7 +55,8 @@ def pytest_collection_modifyitems(session, config, items):
     try:
         seed = getattr(config, 'random_order_seed', None)
         bucket_type = config.getoption('random_order_bucket')
-        _shuffle_items(items, bucket_key=_random_order_item_keys[bucket_type], disable=_disable, seed=seed)
+        if bucket_type != 'none':
+            _shuffle_items(items, bucket_key=_random_order_item_keys[bucket_type], disable=_disable, seed=seed)
 
     except Exception as e:
         # See the finally block -- we only fail if we have lost user's tests.

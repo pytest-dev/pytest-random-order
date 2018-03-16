@@ -35,7 +35,7 @@ def test_faulty_shuffle_that_preserves_items_does_not_fail_test_run(monkeypatch,
     result = simple_testdir.runpytest()
     result.assert_outcomes(passed=2)
     result.stdout.fnmatch_lines("""
-        *W0 None pytest-random-order plugin has failed with ValueError*
+        *pytest-random-order plugin has failed with ValueError*
     """)
 
 
