@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pytest-random-order',
-    version='0.5.6',
+    version='0.6.0',
     author='Jazeps Basko',
     author_email='jazeps.basko@gmail.com',
     maintainer='Jazeps Basko',
@@ -35,6 +35,7 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: MIT License',
     ],
     entry_points={
