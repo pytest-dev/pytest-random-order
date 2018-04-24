@@ -142,6 +142,8 @@ def check_call_sequence(seq, bucket='module'):
     ('package', 2, 5),
     ('global', 2, 5),
     ('none', 1, 1),
+    ('parent1', 1, 5),
+    ('parent2', 1, 5),
 ])
 def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket, min_sequences, max_sequences):
     sequences = set()

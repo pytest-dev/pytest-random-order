@@ -12,7 +12,7 @@ def pytest_addoption(parser):
         action='store',
         dest='random_order_bucket',
         default='module',
-        choices=('global', 'package', 'module', 'class', 'none'),
+        choices=('global', 'package', 'module', 'class', 'none', 'parent1', 'parent2'),
         help='Limit reordering of test items across units of code',
     )
     group.addoption(
@@ -72,4 +72,6 @@ _random_order_item_keys = {
     'package': lambda x: x.module.__package__,
     'module': lambda x: x.module.__name__,
     'class': lambda x: (x.module.__name__, x.cls.__name__) if x.cls else x.module.__name__,
+    'parent1': lambda x: x.parent,
+    'parent2': lambda x: x.parent.parent,
 }
