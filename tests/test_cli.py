@@ -4,7 +4,7 @@ def test_help_message(testdir):
     )
     result.stdout.fnmatch_lines([
         'random-order:',
-        '*--random-order-bucket={global,package,module,class,none}*',
+        '*--random-order-bucket={global,package,module,class,parent,grandparent,none}*',
         '*--random-order-seed=*',
     ])
 
