@@ -50,7 +50,7 @@ Design
 
 pytest-random-order plugin groups tests in buckets, shuffles them within buckets and then shuffles the buckets.
 
-You can choose from four types of buckets:
+You can choose from a few types of buckets:
 
 class
     Tests will be shuffled within a class and classes will be shuffled,
@@ -64,11 +64,20 @@ package
     belong to package ``x.y.z`` do not belong to package ``x.y``, so they will fall in different buckets
     when randomising with ``package`` bucket type.
 
+parent
+    If you are using custom test items which don't belong to any module, you can use this to
+    limit reordering of test items to within the ``parent`` to which they belong. For normal test
+    functions the parent is the module in which they are declared.
+
+grandparent
+    Similar to *parent* above, but use the parent of the parent of the test item as the bucket key instead.
+
 global
     All tests fall in the same bucket, full randomness, tests probably take longer to run.
 
 none
     Disable shuffling.
+
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
 then one of many potential orderings that non-global randomisation can produce could be:
