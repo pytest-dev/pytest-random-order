@@ -5,6 +5,17 @@ import traceback
 from pytest_random_order.shuffler import _get_set_of_item_ids, _shuffle_items, _disable
 
 
+all_bucket_types = [
+    'global',
+    'package',
+    'module',
+    'class',
+    'parent',
+    'grandparent',
+    'none',
+]
+
+
 def pytest_addoption(parser):
     group = parser.getgroup('random-order')
     group.addoption(
@@ -12,7 +23,7 @@ def pytest_addoption(parser):
         action='store',
         dest='random_order_bucket',
         default='module',
-        choices=('global', 'package', 'module', 'class', 'parent', 'grandparent', 'none'),
+        choices=all_bucket_types,
         help='Limit reordering of test items across units of code',
     )
     group.addoption(
@@ -42,6 +53,16 @@ def pytest_report_header(config):
 
 def pytest_collection_modifyitems(session, config, items):
     failure = None
+
+    # TODO
+    # To get the last failed:
+    # config.cache.get("cache/lastfailed", {})
+
+    # TODO Detect if we have --failed-first set
+    # TODO Add this to item bucket key calculation -- if we have
+    # TODO failed first then all last failed tests should
+    # TODO fall into the same bucket and this should
+    # TODO be the first bucket
 
     item_ids = _get_set_of_item_ids(items)
 
