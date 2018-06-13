@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
 import codecs
+import os
+
 from setuptools import setup
 
 
@@ -22,7 +23,12 @@ setup(
     url='https://github.com/jbasko/pytest-random-order',
     description='Randomise the order in which pytest tests are run with some control over the randomness',
     long_description=read('README.rst'),
-    py_modules=['pytest_random_order.plugin', 'pytest_random_order.shuffler'],
+    py_modules=[
+        'pytest_random_order.bucket_types',
+        'pytest_random_order.cache',
+        'pytest_random_order.plugin',
+        'pytest_random_order.shuffler',
+    ],
     install_requires=['pytest>=2.9.2'],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

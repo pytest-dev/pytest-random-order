@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from collections import namedtuple
+
+from pytest_random_order.cache import FAILED_FIRST_LAST_FAILED_BUCKET_KEY
+
 try:
     from collections import OrderedDict
 except ImportError:
@@ -23,7 +26,7 @@ ItemKey = namedtuple('ItemKey', field_names=('bucket', 'disabled', 'x'))
 ItemKey.__new__.__defaults__ = (None, None)
 
 
-def _shuffle_items(items, bucket_key=None, disable=None, seed=None):
+def _shuffle_items(items, bucket_key=None, disable=None, seed=None, session=None):
     """
     Shuffles a list of `items` in place.
 
@@ -52,11 +55,11 @@ def _shuffle_items(items, bucket_key=None, disable=None, seed=None):
     def get_full_bucket_key(item):
         assert bucket_key or disable
         if bucket_key and disable:
-            return ItemKey(bucket=bucket_key(item), disabled=disable(item))
+            return ItemKey(bucket=bucket_key(item, session), disabled=disable(item, session))
         elif disable:
-            return ItemKey(disabled=disable(item))
+            return ItemKey(disabled=disable(item, session))
         else:
-            return ItemKey(bucket=bucket_key(item))
+            return ItemKey(bucket=bucket_key(item, session))
 
     # For a sequence of items A1, A2, B1, B2, C1, C2,
     # where key(A1) == key(A2) == key(C1) == key(C2),
@@ -69,15 +72,29 @@ def _shuffle_items(items, bucket_key=None, disable=None, seed=None):
         buckets[full_bucket_key].append(item)
 
     # Shuffle inside a bucket
-    for bucket in buckets.keys():
-        if not bucket.disabled:
-            random.shuffle(buckets[bucket])
+
+    bucket_keys = list(buckets.keys())
+
+    for full_bucket_key in buckets.keys():
+        if full_bucket_key.bucket == FAILED_FIRST_LAST_FAILED_BUCKET_KEY:
+            # Do not shuffle the last failed bucket
+            continue
+
+        if not full_bucket_key.disabled:
+            random.shuffle(buckets[full_bucket_key])
 
     # Shuffle buckets
-    bucket_keys = list(buckets.keys())
-    random.shuffle(bucket_keys)
 
-    items[:] = [item for bk in bucket_keys for item in buckets[bk]]
+    # Only the first bucket can be FAILED_FIRST_LAST_FAILED_BUCKET_KEY
+    if bucket_keys and bucket_keys[0].bucket == FAILED_FIRST_LAST_FAILED_BUCKET_KEY:
+        new_bucket_keys = list(buckets.keys())[1:]
+        random.shuffle(new_bucket_keys)
+        new_bucket_keys.insert(0, bucket_keys[0])
+    else:
+        new_bucket_keys = list(buckets.keys())
+        random.shuffle(new_bucket_keys)
+
+    items[:] = [item for bk in new_bucket_keys for item in buckets[bk]]
     return
 
 
@@ -89,7 +106,7 @@ def _get_set_of_item_ids(items):
         return s
 
 
-def _disable(item):
+def _disable(item, session):
     marker = item.get_marker('random_order')
     if marker:
         is_disabled = marker.kwargs.get('disabled', False)

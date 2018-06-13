@@ -4,30 +4,30 @@ import pytest
 from pytest_random_order.shuffler import _shuffle_items
 
 
-def identity_key(x):
-    return x
+def identity_key(item, session):
+    return item
 
 
-def modulus_2_key(x):
-    return x % 2
+def modulus_2_key(item, session):
+    return item % 2
 
 
-def lt_10_key(x):
-    return x < 10
+def lt_10_key(item, session):
+    return item < 10
 
 
-def disable_if_gt_1000(x):
+def disable_if_gt_1000(item, session):
     # if disable returns a truthy value, it must also be usable as a key.
-    if x > 1000:
-        return x // 1000
+    if item > 1000:
+        return item // 1000
     else:
         return False
 
 
 @pytest.mark.parametrize('key', [
     None,
-    lambda x: None,
-    lambda x: x % 2,
+    lambda item, session: None,
+    lambda item, session: item % 2,
 ])
 def test_shuffles_empty_list_in_place(key):
     items = []
@@ -39,8 +39,8 @@ def test_shuffles_empty_list_in_place(key):
 
 @pytest.mark.parametrize('key', [
     None,
-    lambda x: None,
-    lambda x: x % 2,
+    lambda item, session: None,
+    lambda item, session: item % 2,
 ])
 def test_shuffles_one_item_list_in_place(key):
     items = [42]
@@ -67,10 +67,10 @@ def test_two_bucket_reshuffle():
     _shuffle_items(items, bucket_key=lt_10_key)
     assert items != items_copy
     for i, item in enumerate(items):
-        if lt_10_key(i):
-            assert lt_10_key(item) == lt_10_key(items[0]), items
+        if lt_10_key(i, None):
+            assert lt_10_key(item, None) == lt_10_key(items[0], None), items
         else:
-            assert lt_10_key(item) == lt_10_key(items[10]), items
+            assert lt_10_key(item, None) == lt_10_key(items[10], None), items
 
 
 def test_eight_bucket_reshuffle():
