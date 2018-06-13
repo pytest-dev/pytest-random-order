@@ -31,22 +31,22 @@ def bucket_type_key(bucket_type):
 
 
 @bucket_type_key('global')
-def get_key(item):
+def get_global_key(item):
     return None
 
 
 @bucket_type_key('package')
-def get_key(item):
+def get_package_key(item):
     return item.module.__package__
 
 
 @bucket_type_key('module')
-def get_key(item):
+def get_module_key(item):
     return item.module.__name__
 
 
 @bucket_type_key('class')
-def get_key(item):
+def get_class_key(item):
     if item.cls:
         return item.module.__name__, item.cls.__name__
     else:
@@ -54,17 +54,17 @@ def get_key(item):
 
 
 @bucket_type_key('parent')
-def get_key(item):
+def get_parent_key(item):
     return item.parent
 
 
 @bucket_type_key('grandparent')
-def get_key(item):
+def get_grandparent_key(item):
     return item.parent.parent
 
 
 @bucket_type_key('none')
-def get_key(item):
+def get_none_key(item):
     raise RuntimeError('When shuffling is disabled (bucket_type=none), item key should not be calculated')
 
 
