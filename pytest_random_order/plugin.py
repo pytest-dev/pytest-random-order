@@ -2,6 +2,8 @@ import random
 import sys
 import traceback
 
+from pytest_random_order.bucket_types import bucket_type_keys, bucket_types
+from pytest_random_order.cache import process_failed_first_last_failed
 from pytest_random_order.shuffler import _get_set_of_item_ids, _shuffle_items, _disable
 
 
@@ -12,7 +14,7 @@ def pytest_addoption(parser):
         action='store',
         dest='random_order_bucket',
         default='module',
-        choices=('global', 'package', 'module', 'class', 'parent', 'grandparent', 'none'),
+        choices=bucket_types,
         help='Limit reordering of test items across units of code',
     )
     group.addoption(
@@ -25,7 +27,10 @@ def pytest_addoption(parser):
 
 
 def pytest_configure(config):
-    config.addinivalue_line("markers", "random_order(disabled=True): disable reordering of tests within a module or class")
+    config.addinivalue_line(
+        'markers',
+        'random_order(disabled=True): disable reordering of tests within a module or class'
+    )
 
 
 def pytest_report_header(config):
@@ -43,13 +48,22 @@ def pytest_report_header(config):
 def pytest_collection_modifyitems(session, config, items):
     failure = None
 
+    session.pytest_random_order_bucket_type_key_handlers = []
+    process_failed_first_last_failed(session, config, items)
+
     item_ids = _get_set_of_item_ids(items)
 
     try:
         seed = str(config.getoption('random_order_seed'))
         bucket_type = config.getoption('random_order_bucket')
         if bucket_type != 'none':
-            _shuffle_items(items, bucket_key=_random_order_item_keys[bucket_type], disable=_disable, seed=seed)
+            _shuffle_items(
+                items,
+                bucket_key=bucket_type_keys[bucket_type],
+                disable=_disable,
+                seed=seed,
+                session=session,
+            )
 
     except Exception as e:
         # See the finally block -- we only fail if we have lost user's tests.
@@ -65,13 +79,3 @@ def pytest_collection_modifyitems(session, config, items):
             if not failure:
                 failure = 'pytest-random-order plugin has failed miserably'
             raise RuntimeError(failure)
-
-
-_random_order_item_keys = {
-    'global': lambda x: None,
-    'package': lambda x: x.module.__package__,
-    'module': lambda x: x.module.__name__,
-    'class': lambda x: (x.module.__name__, x.cls.__name__) if x.cls else x.module.__name__,
-    'parent': lambda x: x.parent,
-    'grandparent': lambda x: x.parent.parent,
-}

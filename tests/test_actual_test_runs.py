@@ -206,3 +206,24 @@ def test_generated_seed_is_reported_and_run_can_be_reproduced(testdir, twenty_te
     result2.assert_outcomes(passed=20)
     calls2 = get_test_calls(result2)
     assert calls == calls2
+
+
+@pytest.mark.parametrize('bucket', [
+    'global',
+    'package',
+    'module',
+    'class',
+    'parent',
+    'grandparent',
+    'none',
+])
+def test_failed_first(tmp_tree_of_tests, get_test_calls, bucket):
+    result1 = tmp_tree_of_tests.runpytest('--random-order-bucket={0}'.format(bucket), '--verbose')
+    result1.assert_outcomes(passed=14, failed=3)
+
+    result2 = tmp_tree_of_tests.runpytest('--random-order-bucket={0}'.format(bucket), '--failed-first', '--verbose')
+    result2.assert_outcomes(passed=14, failed=3)
+
+    calls2 = get_test_calls(result2)
+    first_three_tests = set(c.name for c in calls2[:3])
+    assert set(['test_a1', 'test_b2', 'test_ee2']) == first_three_tests

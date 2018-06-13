@@ -156,6 +156,13 @@ You can now use the ``--random-order-seed=...`` bit as an argument to the next r
     $ pytest -v --random-order-seed=24775
 
 
+Run Last Failed Tests First
++++++++++++++++++++++++++++
+
+Since v0.8.0 pytest cache plugin's ``--failed-first`` flag is supported -- tests that failed in the last run
+will be run before tests that passed irrespective of shuffling bucket type.
+
+
 Disable Randomisation or the Plugin
 +++++++++++++++++++++++++++++++++++
 
