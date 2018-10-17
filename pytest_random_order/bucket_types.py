@@ -30,37 +30,44 @@ def bucket_type_key(bucket_type):
     return decorator
 
 
+def get_genid(item):
+    genid = item._genid
+    if genid and '-' in genid:
+        genid = genid.split('-', 1)[1]
+    return genid
+
+
 @bucket_type_key('global')
 def get_global_key(item):
-    return None
+    return None, get_genid(item)
 
 
 @bucket_type_key('package')
 def get_package_key(item):
-    return item.module.__package__
+    return item.module.__package__, get_genid(item)
 
 
 @bucket_type_key('module')
 def get_module_key(item):
-    return item.module.__name__
+    return item.module.__name__, get_genid(item)
 
 
 @bucket_type_key('class')
 def get_class_key(item):
     if item.cls:
-        return item.module.__name__, item.cls.__name__
+        return item.module.__name__, item.cls.__name__, get_genid(item)
     else:
-        return item.module.__name__
+        return item.module.__name__, get_genid(item)
 
 
 @bucket_type_key('parent')
 def get_parent_key(item):
-    return item.parent
+    return item.parent, get_genid(item)
 
 
 @bucket_type_key('grandparent')
 def get_grandparent_key(item):
-    return item.parent.parent
+    return item.parent.parent, get_genid(item)
 
 
 @bucket_type_key('none')
