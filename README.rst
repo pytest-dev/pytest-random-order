@@ -205,7 +205,7 @@ Since v0.8.0 pytest cache plugin's ``--failed-first`` flag is supported -- tests
 will be run before tests that passed irrespective of shuffling bucket type.
 
 
-Disable Randomisation or the Plugin
+Disable the Plugin
 +++++++++++++++++++++++++++++++++++
 
 If the plugin misbehaves or you just want to assure yourself that it is not the plugin making your tests fail or
