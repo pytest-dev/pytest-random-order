@@ -179,3 +179,26 @@ To disable just the shuffling, but let the plugin exist:
 
     $ pytest --random-order-bucket=none
 
+
+Changes
++++++++
+
+v1.0.0 (2018-10-20)
+-------------------
+
+* Plugin no longer alters the test order by default. You will have to either 1) pass ``--random-order``,
+  or ``--random-order-bucket=<bucket>``, or 2) edit your pytest configuration file and add one of these options
+  there under ``addopts``, or 3) specify these flags in environment variable ``PYTEST_ADDOPTS``.
+* Python 3.5+ is required. If you want to use this plugin with Python 2.7, use v0.8.0 which is stable and fine
+  if you are happy with it randomising the test order by default.
+* The name under which the plugin registers itself is changed from ``random-order`` (hyphen) to ``random_order``
+  (underscore). This addresses the issue of consistency when disabling or enabling this plugin via the standard
+  ``-p`` flag. Previously, the plugin could be disabled by passing ``-p no:random-order`` yet re-enabled
+  only by passing ``-p pytest_random_order.plugin`` (which was a bug in itself). Now they are ``-p no:random_order``
+  to disable and ``-p random_order`` to enable.
+
+
+v0.8.0
+------
+
+* pytest cache plugin's ``--failed-first`` works now.

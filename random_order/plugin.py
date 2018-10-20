@@ -2,9 +2,9 @@ import random
 import sys
 import traceback
 
-from pytest_random_order.bucket_types import bucket_type_keys, bucket_types
-from pytest_random_order.cache import process_failed_first_last_failed
-from pytest_random_order.shuffler import _get_set_of_item_ids, _shuffle_items, _disable
+from random_order.bucket_types import bucket_type_keys, bucket_types
+from random_order.cache import process_failed_first_last_failed
+from random_order.shuffler import _get_set_of_item_ids, _shuffle_items, _disable
 
 
 def pytest_addoption(parser):
@@ -48,7 +48,7 @@ def pytest_report_header(config):
 def pytest_collection_modifyitems(session, config, items):
     failure = None
 
-    session.pytest_random_order_bucket_type_key_handlers = []
+    session.random_order_bucket_type_key_handlers = []
     process_failed_first_last_failed(session, config, items)
 
     item_ids = _get_set_of_item_ids(items)

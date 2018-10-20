@@ -2,7 +2,7 @@
 
 from collections import namedtuple
 
-from pytest_random_order.cache import FAILED_FIRST_LAST_FAILED_BUCKET_KEY
+from random_order.cache import FAILED_FIRST_LAST_FAILED_BUCKET_KEY
 
 try:
     from collections import OrderedDict

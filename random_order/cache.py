@@ -33,4 +33,4 @@ def process_failed_first_last_failed(session, config, items):
         else:
             return key
 
-    session.pytest_random_order_bucket_type_key_handlers.append(assign_last_failed_to_same_bucket)
+    session.random_order_bucket_type_key_handlers.append(assign_last_failed_to_same_bucket)
