@@ -215,7 +215,7 @@ pass undeservedly, you can disable it:
 
     $ pytest -p no:random_order
 
-Note that randomisation is disabled by default. By passing ``--p no:random_order`` you are stopping the plugin
+Note that randomisation is disabled by default. By passing ``-p no:random_order`` you are stopping the plugin
 from being registered so its hooks won't be registered and its command line options won't appear in ``--help``.
 
 --------------
@@ -234,8 +234,10 @@ v1.0.0 (2018-10-20)
 * The name under which the plugin registers itself is changed from ``random-order`` (hyphen) to ``random_order``
   (underscore). This addresses the issue of consistency when disabling or enabling this plugin via the standard
   ``-p`` flag. Previously, the plugin could be disabled by passing ``-p no:random-order`` yet re-enabled
-  only by passing ``-p pytest_random_order.plugin`` (which was a bug in itself). Now they are ``-p no:random_order``
-  to disable and ``-p random_order`` to enable.
+  only by passing ``-p pytest_random_order.plugin``. Now they are ``-p no:random_order``
+  to disable and ``-p random_order.plugin`` to enable (The ``.plugin`` bit, I think, is required because
+  pytest probably thinks it's an unrelated thing to ``random_order`` and import it, yet without it it's the
+  same thing so doesn't import it).
 
 
 v0.8.0
