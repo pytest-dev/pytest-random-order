@@ -45,6 +45,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: MIT License',
     ],
+    keywords='pytest random test order shuffle',
     entry_points={
         'pytest11': [
             'random_order = random_order.plugin',  # >=1.0.0
