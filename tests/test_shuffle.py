@@ -1,6 +1,5 @@
 import pytest
 
-
 from random_order.shuffler import _shuffle_items
 
 

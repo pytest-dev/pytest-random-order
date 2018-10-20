@@ -4,25 +4,32 @@ import traceback
 
 from random_order.bucket_types import bucket_type_keys, bucket_types
 from random_order.cache import process_failed_first_last_failed
-from random_order.shuffler import _get_set_of_item_ids, _shuffle_items, _disable
+from random_order.config import Config
+from random_order.shuffler import _disable, _get_set_of_item_ids, _shuffle_items
 
 
 def pytest_addoption(parser):
-    group = parser.getgroup('random-order')
+    group = parser.getgroup('pytest-random-order options')
+    group.addoption(
+        '--random-order',
+        action='store_true',
+        dest='random_order_enabled',
+        help='Randomise test order (by default, it is disabled) with default configuration.',
+    )
     group.addoption(
         '--random-order-bucket',
         action='store',
         dest='random_order_bucket',
-        default='module',
+        default=Config.default_value('module'),
         choices=bucket_types,
-        help='Limit reordering of test items across units of code',
+        help='Randomise test order within specified test buckets.',
     )
     group.addoption(
         '--random-order-seed',
         action='store',
         dest='random_order_seed',
-        default=str(random.randint(1, 1000000)),
-        help='Seed for the test order randomiser to produce a random order that can be reproduced using this seed',
+        default=Config.default_value(str(random.randint(1, 1000000))),
+        help='Randomise test order using a specific seed.',
     )
 
 
@@ -34,15 +41,13 @@ def pytest_configure(config):
 
 
 def pytest_report_header(config):
-    out = ''
-
-    if config.getoption('random_order_bucket'):
-        out += "Using --random-order-bucket={0}\n".format(config.getoption('random_order_bucket'))
-
-    if config.getoption('random_order_seed'):
-        out += 'Using --random-order-seed={0}\n'.format(config.getoption('random_order_seed'))
-
-    return out
+    plugin = Config(config)
+    if not plugin.is_enabled:
+        return "Test order randomisation NOT enabled. Enable with --random-order or --random-order-bucket=<bucket_type>"
+    return (
+        'Using --random-order-bucket={plugin.bucket_type}\n'
+        'Using --random-order-seed={plugin.seed}\n'
+    ).format(plugin=plugin)
 
 
 def pytest_collection_modifyitems(session, config, items):
@@ -53,9 +58,11 @@ def pytest_collection_modifyitems(session, config, items):
 
     item_ids = _get_set_of_item_ids(items)
 
+    plugin = Config(config)
+
     try:
-        seed = str(config.getoption('random_order_seed'))
-        bucket_type = config.getoption('random_order_bucket')
+        seed = plugin.seed
+        bucket_type = plugin.bucket_type
         if bucket_type != 'none':
             _shuffle_items(
                 items,

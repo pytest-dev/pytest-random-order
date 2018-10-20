@@ -1,8 +1,5 @@
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
 import functools
+from collections import OrderedDict
 
 bucket_type_keys = OrderedDict()
 

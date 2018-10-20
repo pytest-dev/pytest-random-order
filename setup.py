@@ -26,6 +26,7 @@ setup(
     py_modules=[
         'random_order.bucket_types',
         'random_order.cache',
+        'random_order.config',
         'random_order.plugin',
         'random_order.shuffler',
     ],

@@ -1,36 +1,59 @@
+===================================
 pytest-random-order
 ===================================
 
-.. image:: https://img.shields.io/badge/python-2.6%2C%202.7%2C%203.5-blue.svg
-    :target: https://github.com/jbasko/pytest-random-order
-
-.. image:: https://img.shields.io/badge/coverage-98%25-green.svg
+.. image:: https://img.shields.io/badge/python-3.5%2C%203.6%2C%203.7-blue.svg
     :target: https://github.com/jbasko/pytest-random-order
 
 .. image:: https://travis-ci.org/jbasko/pytest-random-order.svg?branch=master
     :target: https://travis-ci.org/jbasko/pytest-random-order
 
-pytest-random-order is a plugin for `pytest <http://pytest.org>`_ that randomises the order in which
-tests are run to reveal unwanted coupling between tests. The plugin allows user to control the level
-of randomness they want to introduce and to disable reordering on subsets of tests.
-Tests can be rerun in a specific order by passing a seed value reported in a previous test run.
+**pytest-random-order** is a `pytest <http://pytest.org>`_ plugin that randomises the order of tests.
+This can be useful to detect a test that passes just because it happens to run after an unrelated test that
+leaves the system in a *favourable* state.
 
+The plugin allows user to control the level of randomness they want to introduce and to disable
+reordering on subsets of tests. Tests can be rerun in a specific order by passing a seed value reported
+in a previous test run.
 
+-----------
 Quick Start
 -----------
+
+Installation:
 
 ::
 
     $ pip install pytest-random-order
 
-The plugin **is enabled by default**. To randomise the order of tests within modules and shuffle the order of
-test modules (which is the default behaviour of the plugin), just run pytest as always:
+From v1.0.0 onwards, this plugin no longer randomises tests by default. To enable randomisation, you have to run
+pytest in one of the following ways:
 
 ::
 
-    $ pytest -v
+    pytest --random-order
+    pytest --random-order-bucket=<bucket_type>
+    pytest --random-order-seed=<seed>
 
-To change the level of randomness allowed, run pytest with ``--random-order-bucket=<bucket-type>`` option
+If you want to always randomise the order of tests, configure pytest. There are many ways to do it,
+my favourite one is to add ``addopts = --random-order`` in your project-specific configuration file
+under the pytest options (usually ``[pytest]`` or ``[tool:pytest]`` section).
+
+Alternatively, you can set environment variable ``PYTEST_ADDOPTS``:
+
+::
+
+    export PYTEST_ADDOPTS="--random-order"
+
+
+To randomise the order of tests within modules and shuffle the order of
+test modules (which is the default behaviour of the plugin), run pytest as follows:
+
+::
+
+    $ pytest --random-order
+
+To change the scope of re-ordering, run pytest with ``--random-order-bucket=<bucket-type>`` option
 where ``<bucket-type>`` can be ``class``, ``module``, ``package``, ``global``, or ``none``:
 
 ::
@@ -47,27 +70,45 @@ To rerun tests in a particular order:
 
 ::
 
-    $ pytest -v --random-order-seed=<value-reported-in-previous-run>
+    $ pytest -v --random-order-seed=<seed>
 
+All runs in which the randomisation is enabled report seed so if you encounter a specific ordering of tests
+that causes problems you can look up the value in the test report and repeat the run with the above command.
 
+::
+
+    platform darwin -- Python 3.5.6, pytest-3.9.1, py-1.7.0, pluggy-0.8.0
+    Using --random-order-bucket=module
+    Using --random-order-seed=383013
+
+------
 Design
 ------
 
-pytest-random-order plugin groups tests in buckets, shuffles them within buckets and then shuffles the buckets.
+The plugin groups tests in buckets, shuffles them within buckets and then shuffles the buckets.
 
-You can choose from four types of buckets:
+You can choose from a few types of buckets:
 
 class
     Tests will be shuffled within a class and classes will be shuffled,
     but tests from one class will never have tests from other classes or modules run in-between them.
 
 module
-    Same as above at module level. **This is the default setting**.
+    Same as above at module level. This is the setting applied if you run pytest with just ``--random-order`` flag
+    or ``--random-order-seed=<seed>``.
 
 package
     Same as above at package level. Note that modules (and hence tests inside those modules) that
     belong to package ``x.y.z`` do not belong to package ``x.y``, so they will fall in different buckets
     when randomising with ``package`` bucket type.
+
+parent
+    If you are using custom test items which don't belong to any module, you can use this to
+    limit reordering of test items to within the ``parent`` to which they belong. For normal test
+    functions the parent is the module in which they are declared.
+
+grandparent
+    Similar to *parent* above, but use the parent of the parent of the test item as the bucket key instead.
 
 global
     All tests fall in the same bucket, full randomness, tests probably take longer to run.
@@ -86,12 +127,13 @@ As you can see, all C tests are executed "next" to each other and so are tests i
 Tests from any bucket X are guaranteed to not be interspersed with tests from another bucket Y.
 For example, if you choose bucket type ``module`` then bucket X contains all tests that are in this module.
 
-By default, your tests will be randomised at ``module`` level which means that
+By default, when randomisation is enabled, your tests will be randomised at ``module`` level which means that
 tests within a single module X will be executed in no particular order, but tests from
 other modules will not be mixed in between tests of module X.
 
 The randomised reordering can be disabled per module or per class irrespective of the chosen bucket type.
 
+--------------
 Usage and Tips
 --------------
 
@@ -171,23 +213,21 @@ pass undeservedly, you can disable it:
 
 ::
 
-    $ pytest -p no:random-order -v
+    $ pytest -p no:random_order
 
-To disable just the shuffling, but let the plugin exist:
+Note that randomisation is disabled by default. By passing ``--p no:random_order`` you are stopping the plugin
+from being registered so its hooks won't be registered and its command line options won't appear in ``--help``.
 
-::
-
-    $ pytest --random-order-bucket=none
-
-
-Changes
-+++++++
+--------------
+Changelog
+--------------
 
 v1.0.0 (2018-10-20)
--------------------
++++++++++++++++++++
 
 * Plugin no longer alters the test order by default. You will have to either 1) pass ``--random-order``,
-  or ``--random-order-bucket=<bucket>``, or 2) edit your pytest configuration file and add one of these options
+  or ``--random-order-bucket=<bucket>``, or ``--random-order-seed=<seed>``, or
+  2) edit your pytest configuration file and add one of these options
   there under ``addopts``, or 3) specify these flags in environment variable ``PYTEST_ADDOPTS``.
 * Python 3.5+ is required. If you want to use this plugin with Python 2.7, use v0.8.0 which is stable and fine
   if you are happy with it randomising the test order by default.
@@ -199,6 +239,6 @@ v1.0.0 (2018-10-20)
 
 
 v0.8.0
-------
+++++++
 
 * pytest cache plugin's ``--failed-first`` works now.
