@@ -1,7 +1,6 @@
 import pytest
 
-
-from pytest_random_order.shuffler import _shuffle_items
+from random_order.shuffler import _shuffle_items
 
 
 def identity_key(item, session):

@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from collections import namedtuple
-
-from pytest_random_order.cache import FAILED_FIRST_LAST_FAILED_BUCKET_KEY
-
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
 import random
+from collections import OrderedDict, namedtuple
 
+from random_order.cache import FAILED_FIRST_LAST_FAILED_BUCKET_KEY
 
 """
 `bucket` is a string representing the bucket in which the item falls based on user's chosen

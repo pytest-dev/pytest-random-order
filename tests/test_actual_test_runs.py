@@ -186,7 +186,7 @@ def test_random_order_seed_is_respected(testdir, twenty_tests, get_test_calls):
 
 def test_generated_seed_is_reported_and_run_can_be_reproduced(testdir, twenty_tests, get_test_calls):
     testdir.makepyfile(twenty_tests)
-    result = testdir.runpytest('-v')
+    result = testdir.runpytest('-v', '--random-order')
     result.assert_outcomes(passed=20)
     result.stdout.fnmatch_lines([
         '*Using --random-order-seed=*'

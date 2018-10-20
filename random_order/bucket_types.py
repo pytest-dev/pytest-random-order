@@ -1,8 +1,5 @@
-try:
-    from collections import OrderedDict
-except ImportError:
-    from ordereddict import OrderedDict
 import functools
+from collections import OrderedDict
 
 bucket_type_keys = OrderedDict()
 
@@ -19,7 +16,7 @@ def bucket_type_key(bucket_type):
             key = f(item)
 
             if session is not None:
-                for handler in session.pytest_random_order_bucket_type_key_handlers:
+                for handler in session.random_order_bucket_type_key_handlers:
                     key = handler(item, key)
 
             return key

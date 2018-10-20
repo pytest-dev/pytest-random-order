@@ -14,7 +14,7 @@ def read(fname):
 
 setup(
     name='pytest-random-order',
-    version='0.8.0',
+    version='1.0.0',
     author='Jazeps Basko',
     author_email='jazeps.basko@gmail.com',
     maintainer='Jazeps Basko',
@@ -24,21 +24,22 @@ setup(
     description='Randomise the order in which pytest tests are run with some control over the randomness',
     long_description=read('README.rst'),
     py_modules=[
-        'pytest_random_order.bucket_types',
-        'pytest_random_order.cache',
-        'pytest_random_order.plugin',
-        'pytest_random_order.shuffler',
+        'random_order.bucket_types',
+        'random_order.cache',
+        'random_order.config',
+        'random_order.plugin',
+        'random_order.shuffler',
     ],
-    install_requires=['pytest>=2.9.2'],
+    python_requires=">=3.5.0",
+    install_requires=[
+        'pytest>=2.9.2',
+    ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Framework :: Pytest',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Testing',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
@@ -46,7 +47,7 @@ setup(
     ],
     entry_points={
         'pytest11': [
-            'random-order = pytest_random_order.plugin',
+            'random_order = random_order.plugin',  # >=1.0.0
         ],
     },
 )

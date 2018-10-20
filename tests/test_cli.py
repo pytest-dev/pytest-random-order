@@ -3,7 +3,7 @@ def test_help_message(testdir):
         '--help',
     )
     result.stdout.fnmatch_lines([
-        'random-order:',
+        'pytest-random-order options:',
         '*--random-order-bucket={global,package,module,class,parent,grandparent,none}*',
         '*--random-order-seed=*',
     ])

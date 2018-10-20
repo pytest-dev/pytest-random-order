@@ -2,7 +2,6 @@ import collections
 
 import pytest
 
-
 pytest_plugins = 'pytester'
 
 
