@@ -18,10 +18,6 @@ in a previous test run.
 
 .. image:: ./docs/pytest-random-order-design.png
 
-.. image:: ./docs/pytest-random-order-example1.png
-
-.. image:: ./docs/pytest-random-order-example2.png
-
 -----------
 Quick Start
 -----------
@@ -91,7 +87,15 @@ that causes problems you can look up the value in the test report and repeat the
 Design
 ------
 
+.. image:: ./docs/pytest-random-order-design.png
+
 The plugin groups tests in buckets, shuffles them within buckets and then shuffles the buckets.
+
+Given the test suite above, here are two of a few possible generated orders of tests:
+
+.. image:: ./docs/pytest-random-order-example1.png
+
+.. image:: ./docs/pytest-random-order-example2.png
 
 You can choose from a few types of buckets:
 
@@ -121,6 +125,7 @@ global
 
 none
     Disable shuffling.
+
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
 then one of many potential orderings that non-global randomisation can produce could be:
