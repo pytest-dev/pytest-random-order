@@ -16,6 +16,12 @@ The plugin allows user to control the level of randomness they want to introduce
 reordering on subsets of tests. Tests can be rerun in a specific order by passing a seed value reported
 in a previous test run.
 
+.. image:: ./docs/pytest-random-order-design.png
+
+.. image:: ./docs/pytest-random-order-example1.png
+
+.. image:: ./docs/pytest-random-order-example2.png
+
 -----------
 Quick Start
 -----------
@@ -244,3 +250,16 @@ v0.8.0
 ++++++
 
 * pytest cache plugin's ``--failed-first`` works now.
+
+-------
+Credits
+-------
+
+* The shuffle icon in the diagram is by artist `Daniele De Santis`_ and it was found on
+  `iconarchive`_.
+
+* The diagram is drawn with `sketchboard.io`_
+
+.. _Daniele De Santis: https://www.danieledesantis.net/
+.. _iconarchive: http://www.iconarchive.com/artist/danieledesantis.html
+.. _sketchboard.io: https://sketchboard.io/
