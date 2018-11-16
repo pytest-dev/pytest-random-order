@@ -14,7 +14,7 @@ def read(fname):
 
 setup(
     name='pytest-random-order',
-    version='1.0.2',
+    version='1.0.3',
     author='Jazeps Basko',
     author_email='jazeps.basko@gmail.com',
     maintainer='Jazeps Basko',
@@ -23,16 +23,13 @@ setup(
     url='https://github.com/jbasko/pytest-random-order',
     description='Randomise the order in which pytest tests are run with some control over the randomness',
     long_description=read('README.rst'),
-    py_modules=[
-        'random_order.bucket_types',
-        'random_order.cache',
-        'random_order.config',
-        'random_order.plugin',
-        'random_order.shuffler',
+    packages=[
+        'random_order',
     ],
+    include_package_data=True,
     python_requires=">=3.5.0",
     install_requires=[
-        'pytest>=2.9.2',
+        'pytest>=3.0.0',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

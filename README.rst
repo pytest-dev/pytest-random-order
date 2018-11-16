@@ -28,7 +28,7 @@ Installation:
 
     $ pip install pytest-random-order
 
-From v1.0.0 onwards, this plugin no longer randomises tests by default. To enable randomisation, you have to run
+From v1.0.0 onwards, **this plugin no longer randomises tests by default**. To enable randomisation, you have to run
 pytest in one of the following ways:
 
 ::
@@ -232,6 +232,12 @@ from being registered so its hooks won't be registered and its command line opti
 --------------
 Changelog
 --------------
+
+v1.0.3 (2018-11-16)
++++++++++++++++++++
+
+* Fixes compatibility issues with pytest 4.0.0, works with pytest 3.0+ as before.
+* Tests included in the source distribution.
 
 v1.0.0 (2018-10-20)
 +++++++++++++++++++

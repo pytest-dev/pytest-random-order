@@ -101,7 +101,10 @@ def _get_set_of_item_ids(items):
 
 
 def _disable(item, session):
-    marker = item.get_marker('random_order')
+    if hasattr(item, 'get_closest_marker'):
+        marker = item.get_closest_marker('random_order')
+    else:
+        marker = item.get_marker('random_order')
     if marker:
         is_disabled = marker.kwargs.get('disabled', False)
         if is_disabled:

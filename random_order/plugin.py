@@ -1,6 +1,9 @@
 import random
 import sys
 import traceback
+import warnings
+
+import pytest
 
 from random_order.bucket_types import bucket_type_keys, bucket_types
 from random_order.cache import process_failed_first_last_failed
@@ -78,7 +81,10 @@ def pytest_collection_modifyitems(session, config, items):
         failure = 'pytest-random-order plugin has failed with {0!r}:\n{1}'.format(
             e, ''.join(traceback.format_tb(exc_tb, 10))
         )
-        config.warn(0, failure, None)
+        if not hasattr(pytest, "PytestWarning"):
+            config.warn(0, failure, None)
+        else:
+            warnings.warn(pytest.PytestWarning(failure))
 
     finally:
         # Fail only if we have lost user's tests
