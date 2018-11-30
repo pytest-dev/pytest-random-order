@@ -56,7 +56,7 @@ test modules (which is the default behaviour of the plugin), run pytest as follo
     $ pytest --random-order
 
 To change the scope of re-ordering, run pytest with ``--random-order-bucket=<bucket-type>`` option
-where ``<bucket-type>`` can be ``class``, ``module``, ``package``, ``global``, or ``none``:
+where ``<bucket-type>`` can be ``class``, ``module``, ``package``, ``global``:
 
 ::
 
@@ -123,8 +123,9 @@ grandparent
 global
     All tests fall in the same bucket, full randomness, tests probably take longer to run.
 
-none
-    Disable shuffling.
+none (deprecated)
+    Disable shuffling. *Deprecated since 1.0.4 because this plugin no longer shuffles tests by default
+    so there is nothing to disable.*
 
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
@@ -232,6 +233,14 @@ from being registered so its hooks won't be registered and its command line opti
 --------------
 Changelog
 --------------
+
+v1.0.4 (2018-11-30)
++++++++++++++++++++
+
+* Fixes issues with doctests reported in #36 - ``class``, ``package`` and ``module`` didn't work
+  because ``DoctestItem`` doesn't have ``cls`` or ``module`` attributes. Thanks @tobywf.
+* Deprecate ``none`` bucket type.
+* With tox, run tests of pytest-random-order with both pytest 3 and 4.
 
 v1.0.3 (2018-11-16)
 +++++++++++++++++++

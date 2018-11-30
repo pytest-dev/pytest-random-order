@@ -14,7 +14,7 @@ def read(fname):
 
 setup(
     name='pytest-random-order',
-    version='1.0.3',
+    version='1.0.4',
     author='Jazeps Basko',
     author_email='jazeps.basko@gmail.com',
     maintainer='Jazeps Basko',
