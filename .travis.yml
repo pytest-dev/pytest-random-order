@@ -8,7 +8,7 @@ python:
 
 install:
   - pip install tox
-  - "TOX_ENV=${TRAVIS_PYTHON_VERSION/[0-9].[0-9]/py${TRAVIS_PYTHON_VERSION/.}}"
+  - "TOX_ENV=${TRAVIS_PYTHON_VERSION/[0-9].[0-9]/py${TRAVIS_PYTHON_VERSION/.}-pytest4}"
 script: tox -e $TOX_ENV
 
 before_cache:

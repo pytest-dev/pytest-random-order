@@ -1,4 +1,5 @@
 import functools
+import os.path
 from collections import OrderedDict
 
 bucket_type_keys = OrderedDict()
@@ -34,16 +35,20 @@ def get_global_key(item):
 
 @bucket_type_key('package')
 def get_package_key(item):
+    if not hasattr(item, "module"):
+        return os.path.split(item.location[0])[0]
     return item.module.__package__
 
 
 @bucket_type_key('module')
 def get_module_key(item):
-    return item.module.__name__
+    return item.location[0]
 
 
 @bucket_type_key('class')
 def get_class_key(item):
+    if not hasattr(item, "cls"):
+        return item.location[0]
     if item.cls:
         return item.module.__name__, item.cls.__name__
     else:
