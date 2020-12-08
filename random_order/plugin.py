@@ -46,7 +46,7 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     config.addinivalue_line(
         'markers',
-        'random_order(disabled=True): disable reordering of tests within a module or class' #,
+        'random_order(disabled=True): disable reordering of tests within a module or class',
         'flaky-test-finder(n): run the given set of tests in random order `n` times.'
     )
 
@@ -85,18 +85,16 @@ def pytest_collection_modifyitems(session, config, items):
                 seed=seed,
                 session=session,
             )
+
         # print("Shuffle Doneeeee")
         # print("\nItems:", items)
-        
         if plugin.flaky_test_finder>1:
             new_items = reorder_based_on_the_test_set(items)
             # Deep Copy is required
             for idx, item in enumerate(new_items):
                 items[idx] = item
             # print("\nReordering done based on test_set")
-
         # print("\nItems:", items)
-        
     except Exception as e:
         # See the finally block -- we only fail if we have lost user's tests.
         _, _, exc_tb = sys.exc_info()
@@ -128,7 +126,7 @@ set_of_flaky_tests = set()
 tests_status_logger = {}
 
 def pytest_report_teststatus(report, config):
-    
+
     if report.when == 'call':
         # print("\nReport:", report)
         original_test_name = report.nodeid.split("[")[0]
@@ -151,7 +149,7 @@ def reorder_based_on_the_test_set(items):
 
     # Get the ids of the item: If repeat was set to 2 then test id would be: fileName.py::testName[1-2] where 1 is repeat number and 2 is number of total repeats
     # print("\nList of Item IDs:", list(item.nodeid for item in items))
-    
+
     # Sort in place based on number of times asked to repeat
     list_of_repeat = []
     prefix = '['
