@@ -34,12 +34,20 @@ def pytest_addoption(parser):
         default=Config.default_value(str(random.randint(1, 1000000))),
         help='Randomise test order using a specific seed.',
     )
+    group.addoption(
+        '--flaky-test-finder',
+        action='store',
+        dest='flaky_test_finder',
+        default=1,
+        help='To find flaky tests by running all the tests specific number of times in random orders.',
+    )
 
 
 def pytest_configure(config):
     config.addinivalue_line(
         'markers',
-        'random_order(disabled=True): disable reordering of tests within a module or class'
+        'random_order(disabled=True): disable reordering of tests within a module or class' #,
+        'flaky-test-finder(n): run the given set of tests in random order `n` times.'
     )
 
 
@@ -47,7 +55,10 @@ def pytest_report_header(config):
     plugin = Config(config)
     if not plugin.is_enabled:
         return "Test order randomisation NOT enabled. Enable with --random-order or --random-order-bucket=<bucket_type>"
-    return (
+    return_string = ""
+    if plugin.is_enabled and plugin.flaky_test_finder <= 1:
+        return_string = "Flaky test finder NOT enabled. Enable with --flaky-test-finder=<repition_number> where repition_number>1\n"
+    return return_string + (
         'Using --random-order-bucket={plugin.bucket_type}\n'
         'Using --random-order-seed={plugin.seed}\n'
     ).format(plugin=plugin)
@@ -74,7 +85,18 @@ def pytest_collection_modifyitems(session, config, items):
                 seed=seed,
                 session=session,
             )
+        # print("Shuffle Doneeeee")
+        # print("\nItems:", items)
+        
+        if plugin.flaky_test_finder>1:
+            new_items = reorder_based_on_the_test_set(items)
+            # Deep Copy is required
+            for idx, item in enumerate(new_items):
+                items[idx] = item
+            # print("\nReordering done based on test_set")
 
+        # print("\nItems:", items)
+        
     except Exception as e:
         # See the finally block -- we only fail if we have lost user's tests.
         _, _, exc_tb = sys.exc_info()
@@ -92,3 +114,57 @@ def pytest_collection_modifyitems(session, config, items):
             if not failure:
                 failure = 'pytest-random-order plugin has failed miserably'
             raise RuntimeError(failure)
+
+@pytest.hookimpl(trylast=True)
+def pytest_generate_tests(metafunc):
+    plugin = Config(metafunc.config)
+    if plugin.flaky_test_finder > 1:
+        metafunc.fixturenames.append("_pytest_random_order_repeat_number")
+        def add_repeat_id(i, n=plugin.flaky_test_finder):
+            return '{0}-{1}'.format(i + 1, n)
+        metafunc.parametrize('_pytest_random_order_repeat_number', range(plugin.flaky_test_finder), indirect=True, ids=add_repeat_id, scope="module")
+
+set_of_flaky_tests = set()
+tests_status_logger = {}
+
+def pytest_report_teststatus(report, config):
+    
+    if report.when == 'call':
+        # print("\nReport:", report)
+        original_test_name = report.nodeid.split("[")[0]
+        if original_test_name in tests_status_logger:
+            if report.outcome != tests_status_logger[original_test_name]:
+                set_of_flaky_tests.add(original_test_name)
+        else:
+            tests_status_logger[original_test_name] = report.outcome
+
+def pytest_terminal_summary(terminalreporter, exitstatus, config):
+    if len(set_of_flaky_tests):
+        print("\nList of Flaky Tests:", set_of_flaky_tests)
+    else:
+        print("\nList of Flaky Tests: None")
+
+def reorder_based_on_the_test_set(items):
+    # Sanity Check
+    if items is None or len(items)==0:
+        return items
+
+    # Get the ids of the item: If repeat was set to 2 then test id would be: fileName.py::testName[1-2] where 1 is repeat number and 2 is number of total repeats
+    # print("\nList of Item IDs:", list(item.nodeid for item in items))
+    
+    # Sort in place based on number of times asked to repeat
+    list_of_repeat = []
+    prefix = '['
+    suffix = ']'
+    number_of_repeat = int(items[0].nodeid[items[0].nodeid.find(prefix)+1 : items[0].nodeid.find(suffix)][2])
+    for i in range(number_of_repeat):
+        list_of_repeat.append([])
+    for item in items:
+        # Extract Repeat Number and Number of Repeats
+        repeat_number = int(item.nodeid[item.nodeid.find(prefix)+1 : item.nodeid.find(suffix)][0]) - 1
+        #Add it to the corresponding repeat bucket:
+        list_of_repeat[repeat_number].append(item)
+    new_items = []
+    for repeat_bucket in list_of_repeat:
+        new_items += repeat_bucket
+    return new_items

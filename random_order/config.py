@@ -28,6 +28,10 @@ class Config:
     def seed(self):
         return self._remove_default_prefix(self._config.getoption('random_order_seed'))
 
+    @property
+    def flaky_test_finder(self):
+        return int(self._config.getoption('flaky_test_finder'))
+
     def _remove_default_prefix(self, value):
         if value.startswith('default:'):
             return value[len('default:'):]
