@@ -176,6 +176,12 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
         for flaky_test in set_of_flaky_tests:
             if flaky_test in test_and_outcome_for_output_file:
                 flaky_test_log_data[flaky_test] = test_and_outcome_for_output_file[flaky_test]
+        # add additional fields to the logged dictionary: "list_of_tests_ran", "random_order_seed", "random_order_bucket", flaky_test_repeat_count"
+        flaky_test_log_data["list_of_tests_ran"] = list(tests_order_logger.keys())
+        flaky_test_log_data["random_order_seed"] = plugin.seed
+        flaky_test_log_data["random_order_bucket"] = plugin.bucket_type
+        flaky_test_log_data["flaky_test_finder"] = plugin.flaky_test_finder
+
         #Export the flaky test log data to file
         import json
         plugin = Config(config)
