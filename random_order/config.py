@@ -32,6 +32,10 @@ class Config:
     def flaky_test_finder(self):
         return int(self._config.getoption('flaky_test_finder'))
 
+    @property
+    def flaky_test_log_path(self):
+        return str(self._config.getoption('flaky_test_log_path'))
+
     def _remove_default_prefix(self, value):
         if value.startswith('default:'):
             return value[len('default:'):]
