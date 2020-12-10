@@ -50,11 +50,13 @@ def pytest_addoption(parser):
         help='To set the file path for storing the flaky test log file.',
     )
 
+
 def pytest_configure(config):
     config.addinivalue_line(
         'markers',
         'random_order(disabled=True): disable reordering of tests within a module or class'
     )
+
 
 def pytest_report_header(config):
     plugin = Config(config)
@@ -62,13 +64,14 @@ def pytest_report_header(config):
         return "Test order randomisation NOT enabled. Enable with --random-order or --random-order-bucket=<bucket_type>"
     return_string = ""
     if plugin.is_enabled and plugin.flaky_test_finder <= 1:
-        return_string = return_string + "Flaky test finder NOT enabled. Enable with --flaky-test-finder = <repition_number> where repition_number > 1\n"
+        return_string = return_string + "Flaky test finder NOT enabled. Enable with --flaky-test-finder = <repetition_number> where repetition_number > 1\n"
     if plugin.is_enabled and plugin.flaky_test_log_path:
         return_string = return_string + "Flaky test log path NOT enabled. Enable with --flaky-test-log-path = <log_path>\n"
     return return_string + (
         'Using --random-order-bucket={plugin.bucket_type}\n'
         'Using --random-order-seed={plugin.seed}\n'
     ).format(plugin=plugin)
+
 
 def pytest_collection_modifyitems(session, config, items):
     failure = None
@@ -92,7 +95,7 @@ def pytest_collection_modifyitems(session, config, items):
                 session=session,
             )
 
-        if plugin.flaky_test_finder>1:
+        if plugin.flaky_test_finder > 1:
             new_items = reorder_based_on_the_test_set(items)
             # Deep Copy is required
             for idx, item in enumerate(new_items):
@@ -116,6 +119,7 @@ def pytest_collection_modifyitems(session, config, items):
                 failure = 'pytest-random-order plugin has failed miserably'
             raise RuntimeError(failure)
 
+
 # Inspired from pytest-repeat plugin
 @pytest.hookimpl(trylast=True)
 def pytest_generate_tests(metafunc):
@@ -129,6 +133,7 @@ def pytest_generate_tests(metafunc):
 set_of_flaky_tests = set() # Set of Flaky Tests
 tests_order_logger = OrderedDict() # Stores the test order
 test_and_outcome_for_output_file = OrderedDict() # Stores the "original_test_name" = { "run_<number>" = { "order" = [], "outcome" = ""} }; run_<number> is 0-indexed
+
 
 def pytest_report_teststatus(report, config):
     try:
@@ -154,6 +159,7 @@ def pytest_report_teststatus(report, config):
             test_and_outcome_for_output_file[original_test_name]["run_"+str(repeat_number)]["order"] = list(tests_order_logger.keys())
     except:
         print('Unexpected error raised by pytest-random-order plugin: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
+
 
 def pytest_terminal_summary(terminalreporter, exitstatus, config):
     plugin = Config(config)
@@ -184,6 +190,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus, config):
             print("I/O error({0}): {1}".format(e.errno, e.strerror))
         except: #handle other exceptions such as attribute errors
             print('Unexpected error raised by pytest-random-order plugin: {}. {}, line: {}'.format(sys.exc_info()[0], sys.exc_info()[1], sys.exc_info()[2].tb_lineno))
+
 
 def reorder_based_on_the_test_set(items):
     # Sanity Check
