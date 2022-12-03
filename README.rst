@@ -231,7 +231,7 @@ from being registered so its hooks won't be registered and its command line opti
 Changelog
 --------------
 
-v1.1.0 (2022-12-03)
+v1.1.1 (2022-12-03)
 +++++++++++++++++++
 
  * Fixes xdist support (thanks @matejsp)
