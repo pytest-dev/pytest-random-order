@@ -3,4 +3,3 @@ py
 pytest
 pytest-xdist
 sphinx
-tox

@@ -9,6 +9,7 @@ from random_order.bucket_types import bucket_type_keys, bucket_types
 from random_order.cache import process_failed_first_last_failed
 from random_order.config import Config
 from random_order.shuffler import _disable, _get_set_of_item_ids, _shuffle_items
+from random_order.xdist import XdistHooks
 
 
 def pytest_addoption(parser):
@@ -41,6 +42,17 @@ def pytest_configure(config):
         'markers',
         'random_order(disabled=True): disable reordering of tests within a module or class'
     )
+
+    if config.pluginmanager.hasplugin('xdist'):
+        config.pluginmanager.register(XdistHooks())
+
+    if hasattr(config, 'workerinput'):
+        # pytest-xdist: use seed generated on main.
+        seed = config.workerinput['random_order_seed']
+        if hasattr(config, 'cache'):
+            assert config.cache is not None
+            config.cache.set('random_order_seed', seed)
+        config.option.random_order_seed = seed
 
 
 def pytest_report_header(config):
