@@ -2,11 +2,8 @@
 pytest-random-order
 ===================================
 
-.. image:: https://img.shields.io/badge/python-3.5%2C%203.6%2C%203.7-blue.svg
+.. image:: https://img.shields.io/badge/python-3.7%2C%203.8%2C%203.9%2C%203.10-blue.svg
     :target: https://github.com/jbasko/pytest-random-order
-
-.. image:: https://travis-ci.org/jbasko/pytest-random-order.svg?branch=master
-    :target: https://travis-ci.org/jbasko/pytest-random-order
 
 **pytest-random-order** is a `pytest <http://pytest.org>`_ plugin that randomises the order of tests.
 This can be useful to detect a test that passes just because it happens to run after an unrelated test that
