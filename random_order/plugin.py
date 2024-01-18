@@ -69,7 +69,7 @@ def pytest_collection_modifyitems(session, config, items):
     failure = None
 
     session.random_order_bucket_type_key_handlers = []
-    if config.cache:
+    if hasattr(config, "cache"):
         process_failed_first_last_failed(session, config, items)
 
     item_ids = _get_set_of_item_ids(items)
