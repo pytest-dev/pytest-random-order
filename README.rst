@@ -231,6 +231,12 @@ from being registered so its hooks won't be registered and its command line opti
 Changelog
 --------------
 
+v1.1.1 (2024-01-20)
++++++++++++++++++++
+
+ * Fixes #54 - ``AttributeError`` when cacheprovider plugin disabled. Thanks @jhanm12
+
+
 v1.1.0 (2022-12-03)
 +++++++++++++++++++
 
