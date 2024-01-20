@@ -120,9 +120,10 @@ grandparent
 global
     All tests fall in the same bucket, full randomness, tests probably take longer to run.
 
-none (deprecated)
-    Disable shuffling. *Deprecated since 1.0.4 because this plugin no longer shuffles tests by default
-    so there is nothing to disable.*
+none
+    Disable shuffling. This plugin no longer shuffles tests by default
+    so there is nothing to disable, however, there are scenarios where this is useful
+    due to the way test configs are specified, see #40.
 
 
 If you have three buckets of tests ``A``, ``B``, and ``C`` with three tests ``1`` and ``2``, and ``3`` in each of them,
@@ -248,7 +249,7 @@ v1.0.4 (2018-11-30)
 
 * Fixes issues with doctests reported in #36 - ``class``, ``package`` and ``module`` didn't work
   because ``DoctestItem`` doesn't have ``cls`` or ``module`` attributes. Thanks @tobywf.
-* Deprecate ``none`` bucket type.
+* Deprecate ``none`` bucket type. **Update**: this was a mistake, it will be kept for backwards compatibility.
 * With tox, run tests of pytest-random-order with both pytest 3 and 4.
 
 v1.0.3 (2018-11-16)
