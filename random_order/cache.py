@@ -9,6 +9,9 @@ FAILED_FIRST_LAST_FAILED_BUCKET_KEY = '<failed_first_last_failed>'
 
 
 def process_failed_first_last_failed(session, config, items):
+    if not hasattr(config, 'cache'):
+        return
+
     if not config.getoption('failedfirst'):
         return
 
