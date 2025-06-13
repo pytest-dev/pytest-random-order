@@ -3,6 +3,11 @@
 Changelog
 --------------
 
+UNRELEASED (UNRELEASED)
++++++++++++++++++++++++
+
+* Dropped support for EOL Python versions and added support for Python 3.13.
+
 v1.1.1 (2024-01-20)
 +++++++++++++++++++
 
