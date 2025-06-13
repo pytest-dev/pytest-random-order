@@ -3,8 +3,8 @@
 Changelog
 --------------
 
-UNRELEASED (UNRELEASED)
-+++++++++++++++++++++++
+UNRELEASED
+++++++++++
 
 * Dropped support for EOL Python versions and added support for Python 3.13.
 
