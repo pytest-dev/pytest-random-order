@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: rst
+        name: rst
+        entry: rst-lint --encoding utf-8
+        files: ^(CHANGELOG.rst|README.rst|HOWTORELEASE.rst)$
+        language: python
+        additional_dependencies: [pygments, restructuredtext_lint]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.3
+    hooks:
+      - id: ruff
+        args: ["--fix"]
+      - id: ruff-format

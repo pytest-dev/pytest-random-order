@@ -2,10 +2,10 @@ import collections
 
 import pytest
 
-pytest_plugins = 'pytester'
+pytest_plugins = "pytester"
 
 
-Call = collections.namedtuple('Call', field_names=('package', 'module', 'cls', 'name'))
+Call = collections.namedtuple("Call", field_names=("package", "module", "cls", "name"))
 
 
 def _get_test_calls(result):
@@ -14,13 +14,15 @@ def _get_test_calls(result):
     """
     calls = []
 
-    for c in result.reprec.getcalls('pytest_runtest_call'):
-        calls.append(Call(
-            package=c.item.module.__package__,
-            module=c.item.module.__name__,
-            cls=(c.item.module.__name__, c.item.cls.__name__) if c.item.cls else None,
-            name=c.item.name,
-        ))
+    for c in result.reprec.getcalls("pytest_runtest_call"):
+        calls.append(
+            Call(
+                package=c.item.module.__package__,
+                module=c.item.module.__name__,
+                cls=(c.item.module.__name__, c.item.cls.__name__) if c.item.cls else None,
+                name=c.item.name,
+            )
+        )
     return tuple(calls)
 
 
@@ -36,13 +38,13 @@ def get_test_calls():
 def twenty_tests():
     code = []
     for i in range(20):
-        code.append('def test_a{0}(): assert True\n'.format(str(i).zfill(2)))
-    return ''.join(code)
+        code.append("def test_a{0}(): assert True\n".format(str(i).zfill(2)))
+    return "".join(code)
 
 
 @pytest.fixture
 def twenty_cls_tests():
     code = []
     for i in range(20):
-        code.append('\tdef test_b{0}(self): self.assertTrue\n'.format(str(i).zfill(2)))
-    return ''.join(code)
+        code.append("\tdef test_b{0}(self): self.assertTrue\n".format(str(i).zfill(2)))
+    return "".join(code)

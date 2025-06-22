@@ -1,5 +1,0 @@
-coverage
-py
-pytest
-pytest-xdist
-sphinx

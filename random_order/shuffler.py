@@ -16,7 +16,7 @@ In some cases it is important for the `disabled` to be more than just True in or
 to preserve a distinct disabled sub-bucket within a larger bucket and not mix it up with another
 disabled sub-bucket of the same larger bucket.
 """
-ItemKey = namedtuple('ItemKey', field_names=('bucket', 'disabled', 'x'))
+ItemKey = namedtuple("ItemKey", field_names=("bucket", "disabled", "x"))
 ItemKey.__new__.__defaults__ = (None, None)
 
 
@@ -101,12 +101,12 @@ def _get_set_of_item_ids(items):
 
 
 def _disable(item, session):
-    if hasattr(item, 'get_closest_marker'):
-        marker = item.get_closest_marker('random_order')
+    if hasattr(item, "get_closest_marker"):
+        marker = item.get_closest_marker("random_order")
     else:
-        marker = item.get_marker('random_order')
+        marker = item.get_marker("random_order")
     if marker:
-        is_disabled = marker.kwargs.get('disabled', False)
+        is_disabled = marker.kwargs.get("disabled", False)
         if is_disabled:
             # A test item can only be disabled in its parent context -- where it is part of some order.
             # We use parent name as the key so that all children of the same parent get the same disabled key.
