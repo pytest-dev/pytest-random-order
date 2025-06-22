@@ -8,10 +8,6 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-r a"
-asyncio_mode = "auto"
-filterwarnings = [
-    "ignore:.*usage of Session..*:DeprecationWarning"
-]
 
 [tool.ruff]
 line-length = 120
