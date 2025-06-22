@@ -6,7 +6,7 @@ Here are the steps on how to make a new release.
 4. Once all tests pass, start the ``deploy`` workflow manually or via:
 
    ```
-   gh workflow run deploy.yml --repo pytest-dev/pytest-mock --ref release-VERSION -f version=VERSION
+   gh workflow run deploy.yml --repo pytest-dev/pytest-random-order --ref release-VERSION -f version=VERSION
    ```
 
 5. Merge the PR.
