@@ -93,11 +93,7 @@ def _shuffle_items(items, bucket_key=None, disable=None, seed=None, session=None
 
 
 def _get_set_of_item_ids(items):
-    s = {}
-    try:
-        s = set(item.nodeid for item in items)
-    finally:
-        return s
+    return set(item.nodeid for item in items)
 
 
 def _disable(item, session):

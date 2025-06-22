@@ -7,6 +7,7 @@ UNRELEASED
 ++++++++++
 
 * Dropped support for EOL Python versions and added support for Python 3.13.
+* Fix `#58 <https://github.com/pytest-dev/pytest-random-order/issues/58>`_: ``return`` in a ``finally`` block swallows exceptions and raises a warning in Python 3.14.
 
 v1.1.1 (2024-01-20)
 +++++++++++++++++++

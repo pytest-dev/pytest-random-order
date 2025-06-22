@@ -5,6 +5,8 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools_scm]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-r a"
