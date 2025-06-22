@@ -22,6 +22,7 @@ setup(
     url="https://github.com/jbasko/pytest-random-order",
     description="Randomise the order in which pytest tests are run with some control over the randomness",
     long_description=read("README.rst"),
+    long_description_content_type="text/x-rst",
     packages=[
         "random_order",
     ],
