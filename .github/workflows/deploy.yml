@@ -60,6 +60,5 @@ jobs:
     - name: GitHub Release
       uses: softprops/action-gh-release@v2
       with:
-        body_path: scripts/latest-release-notes.md
         files: dist/*
         tag_name: v${{ github.event.inputs.version }}
