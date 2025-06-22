@@ -38,17 +38,12 @@ setup(
         "Topic :: Software Development :: Testing",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
-        "Programming Language :: Python :: 3.12",
-        "Programming Language :: Python :: 3.13",
         "License :: OSI Approved :: MIT License",
     ],
     keywords="pytest random test order shuffle",
     entry_points={
         "pytest11": [
-            "random_order = random_order.plugin",  # >=1.0.0
+            "random_order = random_order.plugin",
         ],
     },
 )
