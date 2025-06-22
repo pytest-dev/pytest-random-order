@@ -5,24 +5,24 @@ This module is called "cache" because it builds on the "cache" plugin:
 
 """
 
-FAILED_FIRST_LAST_FAILED_BUCKET_KEY = '<failed_first_last_failed>'
+FAILED_FIRST_LAST_FAILED_BUCKET_KEY = "<failed_first_last_failed>"
 
 
 def process_failed_first_last_failed(session, config, items):
-    if not hasattr(config, 'cache'):
+    if not hasattr(config, "cache"):
         return
 
-    if not config.getoption('failedfirst'):
+    if not config.getoption("failedfirst"):
         return
 
-    last_failed_raw = config.cache.get('cache/lastfailed', None)
+    last_failed_raw = config.cache.get("cache/lastfailed", None)
     if not last_failed_raw:
         return
 
     # Get the names of last failed tests
     last_failed = []
     for key in last_failed_raw.keys():
-        parts = key.split('::')
+        parts = key.split("::")
         if len(parts) == 3:
             last_failed.append(tuple(parts))
         elif len(parts) == 2:

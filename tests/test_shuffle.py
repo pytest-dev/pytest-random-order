@@ -23,11 +23,14 @@ def disable_if_gt_1000(item, session):
         return False
 
 
-@pytest.mark.parametrize('key', [
-    None,
-    lambda item, session: None,
-    lambda item, session: item % 2,
-])
+@pytest.mark.parametrize(
+    "key",
+    [
+        None,
+        lambda item, session: None,
+        lambda item, session: item % 2,
+    ],
+)
 def test_shuffles_empty_list_in_place(key):
     items = []
     items_id = id(items)
@@ -36,11 +39,14 @@ def test_shuffles_empty_list_in_place(key):
     assert id(items) == items_id
 
 
-@pytest.mark.parametrize('key', [
-    None,
-    lambda item, session: None,
-    lambda item, session: item % 2,
-])
+@pytest.mark.parametrize(
+    "key",
+    [
+        None,
+        lambda item, session: None,
+        lambda item, session: item % 2,
+    ],
+)
 def test_shuffles_one_item_list_in_place(key):
     items = [42]
     items_id = id(items)
@@ -75,14 +81,22 @@ def test_two_bucket_reshuffle():
 def test_eight_bucket_reshuffle():
     # This is a cross-check to test shuffling of buckets.
     items = [
-        1, 1,
-        2, 2,
-        3, 3,
-        4, 4,
-        5, 5,
-        6, 6,
-        7, 7,
-        8, 8,
+        1,
+        1,
+        2,
+        2,
+        3,
+        3,
+        4,
+        4,
+        5,
+        5,
+        6,
+        6,
+        7,
+        7,
+        8,
+        8,
     ]
     items_copy = list(items)
 
@@ -98,8 +112,26 @@ def test_eight_bucket_reshuffle():
 
 def test_shuffle_respects_single_disabled_group_in_each_of_two_buckets():
     items = [
-        11, 13, 9995, 9997, 19, 21, 23, 25, 27, 29,  # bucket 1 -- odd numbers
-        12, 14, 9996, 9998, 20, 22, 24, 26, 28, 30,  # bucket 2 -- even numbers
+        11,
+        13,
+        9995,
+        9997,
+        19,
+        21,
+        23,
+        25,
+        27,
+        29,  # bucket 1 -- odd numbers
+        12,
+        14,
+        9996,
+        9998,
+        20,
+        22,
+        24,
+        26,
+        28,
+        30,  # bucket 2 -- even numbers
     ]
     items_copy = list(items)
 
@@ -117,15 +149,24 @@ def test_shuffle_respects_two_distinct_disabled_groups_in_one_bucket():
     # This is simulating two disabled modules within same package.
     # The two modules shouldn't be mixed up in one bucket.
     items = [
-        11, 13, 8885, 8887, 8889, 21, 23, 9995, 9997, 9999,
+        11,
+        13,
+        8885,
+        8887,
+        8889,
+        21,
+        23,
+        9995,
+        9997,
+        9999,
     ]
     items_copy = list(items)
 
     for i in range(5):
         _shuffle_items(items, bucket_key=modulus_2_key, disable=disable_if_gt_1000)
         if items != items_copy:
-            assert items[items.index(8885):items.index(8885) + 3] == [8885, 8887, 8889]
-            assert items[items.index(9995):items.index(9995) + 3] == [9995, 9997, 9999]
+            assert items[items.index(8885) : items.index(8885) + 3] == [8885, 8887, 8889]
+            assert items[items.index(9995) : items.index(9995) + 3] == [9995, 9997, 9999]
             return
 
     assert False
