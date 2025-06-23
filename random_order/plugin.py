@@ -58,7 +58,7 @@ def pytest_report_header(config):
     plugin = Config(config)
     if not plugin.is_enabled:
         return "Test order randomisation NOT enabled. Enable with --random-order or --random-order-bucket=<bucket_type>"
-    return ("Using --random-order-bucket={plugin.bucket_type}\n" "Using --random-order-seed={plugin.seed}\n").format(
+    return ("Using --random-order-bucket={plugin.bucket_type}\nUsing --random-order-seed={plugin.seed}\n").format(
         plugin=plugin
     )
 
