@@ -2,12 +2,11 @@
 import collections
 import re
 
-import py
 import pytest
 
 
 @pytest.fixture
-def tmp_tree_of_tests(testdir):
+def tmp_tree_of_tests(testdir, deindent_source):
     """
     Creates a directory structure:
         tmpdir/
@@ -25,7 +24,7 @@ def tmp_tree_of_tests(testdir):
     sup = testdir.mkpydir("shallow_tests")
 
     sup.join("test_a.py").write(
-        py.code.Source("""
+        deindent_source("""
         def test_a1():
             assert False
         def test_a2():
@@ -36,7 +35,7 @@ def tmp_tree_of_tests(testdir):
     )
 
     sup.join("test_ax.py").write(
-        py.code.Source("""
+        deindent_source("""
         def test_ax1():
             assert True
         def test_ax2():
@@ -49,7 +48,7 @@ def tmp_tree_of_tests(testdir):
     sub = testdir.mkpydir("shallow_tests/deep_tests")
 
     sub.join("test_b.py").write(
-        py.code.Source("""
+        deindent_source("""
         def test_b1():
             assert True
         def test_b2():
@@ -60,14 +59,14 @@ def tmp_tree_of_tests(testdir):
     )
 
     sub.join("test_c.py").write(
-        py.code.Source("""
+        deindent_source("""
         def test_c1():
             assert True
     """)
     )
 
     sub.join("test_d.py").write(
-        py.code.Source("""
+        deindent_source("""
         def test_d1():
             assert True
         def test_d2():
@@ -76,7 +75,7 @@ def tmp_tree_of_tests(testdir):
     )
 
     sub.join("test_e.py").write(
-        py.code.Source("""
+        deindent_source("""
         from unittest import TestCase
         class EeTest(TestCase):
             def test_ee1(self):

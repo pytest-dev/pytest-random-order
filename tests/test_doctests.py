@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import py
 import pytest
 
 
 @pytest.fixture
-def tmp_tree_of_tests(testdir):
+def tmp_tree_of_tests(testdir, deindent_source):
     """
     Creates a directory structure:
         tmpdir/
@@ -16,7 +15,7 @@ def tmp_tree_of_tests(testdir):
     utils_package.join("__init__.py").write("")
 
     utils_package.join("foo.py").write(
-        py.code.Source('''
+        deindent_source('''
         def add(a, b):
             """
             >>> add(1, 1)

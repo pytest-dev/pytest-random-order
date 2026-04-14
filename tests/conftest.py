@@ -48,3 +48,33 @@ def twenty_cls_tests():
     for i in range(20):
         code.append("\tdef test_b{0}(self): self.assertTrue\n".format(str(i).zfill(2)))
     return "".join(code)
+
+
+def _deindent_source(source):
+    """
+    A minimal replacement for py.code.Source to deindent inlined test code.
+    Looks for the first non-empty line to determine deindent offset, doesn't
+    attempt to understand the code, line continuations, etc.
+    """
+    lines = source.splitlines()
+    for line in lines:
+        stripped = line.lstrip()
+        if stripped:
+            offset = len(line) - len(stripped)
+            break
+    else:
+        offset = 0
+
+    output_lines = []
+    for line in lines:
+        output_lines.append(line[offset:])
+
+    return "\n".join(output_lines)
+
+
+@pytest.fixture
+def deindent_source():
+    """
+    Returns a helper function to deindent inlined source code.
+    """
+    return _deindent_source
