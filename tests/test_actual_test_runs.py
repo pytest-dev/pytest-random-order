@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 import collections
 import re
+import textwrap
 
 import pytest
 
 
 @pytest.fixture
-def tmp_tree_of_tests(testdir, deindent_source):
+def tmp_tree_of_tests(testdir):
     """
     Creates a directory structure:
         tmpdir/
@@ -24,7 +25,7 @@ def tmp_tree_of_tests(testdir, deindent_source):
     sup = testdir.mkpydir("shallow_tests")
 
     sup.join("test_a.py").write(
-        deindent_source("""
+        textwrap.dedent("""
         def test_a1():
             assert False
         def test_a2():
@@ -35,7 +36,7 @@ def tmp_tree_of_tests(testdir, deindent_source):
     )
 
     sup.join("test_ax.py").write(
-        deindent_source("""
+        textwrap.dedent("""
         def test_ax1():
             assert True
         def test_ax2():
@@ -48,7 +49,7 @@ def tmp_tree_of_tests(testdir, deindent_source):
     sub = testdir.mkpydir("shallow_tests/deep_tests")
 
     sub.join("test_b.py").write(
-        deindent_source("""
+        textwrap.dedent("""
         def test_b1():
             assert True
         def test_b2():
@@ -59,14 +60,14 @@ def tmp_tree_of_tests(testdir, deindent_source):
     )
 
     sub.join("test_c.py").write(
-        deindent_source("""
+        textwrap.dedent("""
         def test_c1():
             assert True
     """)
     )
 
     sub.join("test_d.py").write(
-        deindent_source("""
+        textwrap.dedent("""
         def test_d1():
             assert True
         def test_d2():
@@ -75,7 +76,7 @@ def tmp_tree_of_tests(testdir, deindent_source):
     )
 
     sub.join("test_e.py").write(
-        deindent_source("""
+        textwrap.dedent("""
         from unittest import TestCase
         class EeTest(TestCase):
             def test_ee1(self):

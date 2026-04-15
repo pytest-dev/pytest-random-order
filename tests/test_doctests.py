@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import textwrap
+
 import pytest
 
 
 @pytest.fixture
-def tmp_tree_of_tests(testdir, deindent_source):
+def tmp_tree_of_tests(testdir):
     """
     Creates a directory structure:
         tmpdir/
@@ -15,7 +17,7 @@ def tmp_tree_of_tests(testdir, deindent_source):
     utils_package.join("__init__.py").write("")
 
     utils_package.join("foo.py").write(
-        deindent_source('''
+        textwrap.dedent('''
         def add(a, b):
             """
             >>> add(1, 1)
