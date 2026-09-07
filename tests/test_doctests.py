@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import textwrap
 
 import pytest
@@ -56,7 +55,7 @@ def tmp_tree_of_tests(testdir):
 def test_doctests(tmp_tree_of_tests, get_test_calls, bucket):
     result1 = tmp_tree_of_tests.runpytest(
         "--doctest-modules",
-        "--random-order-bucket={0}".format(bucket),
+        f"--random-order-bucket={bucket}",
         "--verbose",
         "-s",
     )
