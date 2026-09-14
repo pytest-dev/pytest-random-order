@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import collections
 import re
 import textwrap
@@ -164,7 +163,7 @@ def test_it_works_with_actual_tests(tmp_tree_of_tests, get_test_calls, bucket, m
     sequences = set()
 
     for x in range(5):
-        result = tmp_tree_of_tests.runpytest("--random-order-bucket={0}".format(bucket), "--verbose")
+        result = tmp_tree_of_tests.runpytest(f"--random-order-bucket={bucket}", "--verbose")
         result.assert_outcomes(passed=14, failed=3)
         seq = get_test_calls(result)
         check_call_sequence(seq, bucket=bucket)
@@ -181,20 +180,20 @@ def test_random_order_seed_is_respected(testdir, twenty_tests, get_test_calls):
         "2": None,
         "3": None,
     }
-    for seed in call_sequences.keys():
-        result = testdir.runpytest("--random-order-seed={0}".format(seed))
+    for seed in call_sequences:
+        result = testdir.runpytest(f"--random-order-seed={seed}")
 
         result.stdout.fnmatch_lines(
             [
-                "*Using --random-order-seed={0}*".format(seed),
+                f"*Using --random-order-seed={seed}*",
             ]
         )
 
         result.assert_outcomes(passed=20)
         call_sequences[seed] = get_test_calls(result)
 
-    for seed in call_sequences.keys():
-        result = testdir.runpytest("--random-order-seed={0}".format(seed))
+    for seed in call_sequences:
+        result = testdir.runpytest(f"--random-order-seed={seed}")
         result.assert_outcomes(passed=20)
         assert call_sequences[seed] == get_test_calls(result)
 
@@ -217,7 +216,7 @@ def test_generated_seed_is_reported_and_run_can_be_reproduced(testdir, twenty_te
             break
     assert seed
 
-    result2 = testdir.runpytest("-v", "--random-order-seed={0}".format(seed))
+    result2 = testdir.runpytest("-v", f"--random-order-seed={seed}")
     result2.assert_outcomes(passed=20)
     calls2 = get_test_calls(result2)
     assert calls == calls2
@@ -236,10 +235,10 @@ def test_generated_seed_is_reported_and_run_can_be_reproduced(testdir, twenty_te
     ],
 )
 def test_failed_first(tmp_tree_of_tests, get_test_calls, bucket):
-    result1 = tmp_tree_of_tests.runpytest("--random-order-bucket={0}".format(bucket), "--verbose")
+    result1 = tmp_tree_of_tests.runpytest(f"--random-order-bucket={bucket}", "--verbose")
     result1.assert_outcomes(passed=14, failed=3)
 
-    result2 = tmp_tree_of_tests.runpytest("--random-order-bucket={0}".format(bucket), "--failed-first", "--verbose")
+    result2 = tmp_tree_of_tests.runpytest(f"--random-order-bucket={bucket}", "--failed-first", "--verbose")
     result2.assert_outcomes(passed=14, failed=3)
 
     calls2 = get_test_calls(result2)
