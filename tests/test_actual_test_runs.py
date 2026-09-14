@@ -192,10 +192,10 @@ def test_random_order_seed_is_respected(testdir, twenty_tests, get_test_calls):
         result.assert_outcomes(passed=20)
         call_sequences[seed] = get_test_calls(result)
 
-    for seed in call_sequences:
+    for seed, expected_calls in call_sequences.items():
         result = testdir.runpytest(f"--random-order-seed={seed}")
         result.assert_outcomes(passed=20)
-        assert call_sequences[seed] == get_test_calls(result)
+        assert expected_calls == get_test_calls(result)
 
     assert call_sequences["1"] != call_sequences["2"] != call_sequences["3"]
 
@@ -242,5 +242,5 @@ def test_failed_first(tmp_tree_of_tests, get_test_calls, bucket):
     result2.assert_outcomes(passed=14, failed=3)
 
     calls2 = get_test_calls(result2)
-    first_three_tests = set(c.name for c in calls2[:3])
-    assert set(["test_a1", "test_b2", "test_ee2"]) == first_three_tests
+    first_three_tests = {c.name for c in calls2[:3]}
+    assert {"test_a1", "test_b2", "test_ee2"} == first_three_tests
