@@ -58,9 +58,7 @@ def pytest_report_header(config):
     plugin = Config(config)
     if not plugin.is_enabled:
         return "Test order randomisation NOT enabled. Enable with --random-order or --random-order-bucket=<bucket_type>"
-    return ("Using --random-order-bucket={plugin.bucket_type}\nUsing --random-order-seed={plugin.seed}\n").format(
-        plugin=plugin
-    )
+    return f"Using --random-order-bucket={plugin.bucket_type}\nUsing --random-order-seed={plugin.seed}\n"
 
 
 def pytest_collection_modifyitems(session, config, items):
@@ -85,10 +83,9 @@ def pytest_collection_modifyitems(session, config, items):
                 session=session,
             )
 
-    except Exception as e:
-        # See the finally block -- we only fail if we have lost user's tests.
+    except Exception as e:  # noqa: BLE001 -- see the finally block, we only fail if we have lost user's tests.
         _, _, exc_tb = sys.exc_info()
-        failure = "pytest-random-order plugin has failed with {0!r}:\n{1}".format(
+        failure = "pytest-random-order plugin has failed with {!r}:\n{}".format(
             e, "".join(traceback.format_tb(exc_tb, 10))
         )
         if not hasattr(pytest, "PytestWarning"):

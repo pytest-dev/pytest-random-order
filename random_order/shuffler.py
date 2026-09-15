@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import random
 from collections import OrderedDict, namedtuple
 
@@ -69,7 +67,7 @@ def _shuffle_items(items, bucket_key=None, disable=None, seed=None, session=None
 
     bucket_keys = list(buckets.keys())
 
-    for full_bucket_key in buckets.keys():
+    for full_bucket_key in buckets:
         if full_bucket_key.bucket == FAILED_FIRST_LAST_FAILED_BUCKET_KEY:
             # Do not shuffle the last failed bucket
             continue
@@ -93,7 +91,7 @@ def _shuffle_items(items, bucket_key=None, disable=None, seed=None, session=None
 
 
 def _get_set_of_item_ids(items):
-    return set(item.nodeid for item in items)
+    return {item.nodeid for item in items}
 
 
 def _disable(item, session):

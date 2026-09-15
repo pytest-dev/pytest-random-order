@@ -21,7 +21,7 @@ def process_failed_first_last_failed(session, config, items):
 
     # Get the names of last failed tests
     last_failed = []
-    for key in last_failed_raw.keys():
+    for key in last_failed_raw:
         parts = key.split("::")
         if len(parts) == 3:
             last_failed.append(tuple(parts))
