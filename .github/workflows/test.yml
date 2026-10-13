@@ -21,9 +21,9 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Build and Check Package
-        uses: hynek/build-and-inspect-python-package@v2.17.0
+        uses: hynek/build-and-inspect-python-package@v2.18.0
 
   test:
 
@@ -38,7 +38,7 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Download Package
       uses: actions/download-artifact@v8
@@ -47,7 +47,7 @@ jobs:
         path: dist
 
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version: ${{ matrix.python }}
 
