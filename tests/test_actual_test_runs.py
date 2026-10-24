@@ -244,3 +244,29 @@ def test_failed_first(tmp_tree_of_tests, get_test_calls, bucket):
     calls2 = get_test_calls(result2)
     first_three_tests = {c.name for c in calls2[:3]}
     assert {"test_a1", "test_b2", "test_ee2"} == first_three_tests
+
+
+def test_failed_first_with_non_standard_lastfailed_cache_keys(testdir):
+    testdir.makepyfile(
+        """
+        def test_pass():
+            pass
+
+        def test_fail():
+            assert False
+        """
+    )
+    result1 = testdir.runpytest("--failed-first")
+    result1.assert_outcomes(passed=1, failed=1)
+
+    lastfailed_file = testdir.tmpdir.join(".pytest_cache", "v", "cache", "lastfailed")
+    if lastfailed_file.exists():
+        import json
+
+        data = json.loads(lastfailed_file.read())
+        data["some_dir/without_colons"] = True
+        data["test_deep.py::ClassA::ClassB::test_method"] = True
+        lastfailed_file.write(json.dumps(data))
+
+    result2 = testdir.runpytest("--failed-first")
+    result2.assert_outcomes(passed=1, failed=1)
