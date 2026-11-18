@@ -2,11 +2,13 @@ Here are the steps on how to make a new release.
 
 1. Create a ``release-VERSION`` branch from ``upstream/main``.
 2. Update ``CHANGELOG.rst``.
-3. Push the branch to ``upstream``.
+3. Push the branch to ``upstream`` and open a PR targeting ``main``.
 4. Once all tests pass, start the ``deploy`` workflow manually or via:
 
-   ```
-   gh workflow run deploy.yml --repo pytest-dev/pytest-random-order --ref release-VERSION -f version=VERSION
-   ```
+   .. code-block:: console
 
-5. Merge the PR.
+      gh workflow run deploy.yml --repo pytest-dev/pytest-random-order --ref release-VERSION -f version=VERSION
+
+   The workflow publishes the package to PyPI, pushes the ``vVERSION`` tag, creates the GitHub release,
+   and, as the last step, merges the release PR (using a merge commit, so the tagged commit is part of
+   ``main``'s history) and deletes the ``release-VERSION`` branch.
