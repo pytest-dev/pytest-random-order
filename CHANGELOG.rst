@@ -3,6 +3,11 @@
 Changelog
 --------------
 
+UNRELEASED
+++++++++++
+
+* Dropped support for Python 3.9 and 3.10 (Python 3.11+ is now required) and added support for Python 3.14 and 3.15.
+
 1.2.0
 +++++
 

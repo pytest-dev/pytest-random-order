@@ -2,7 +2,7 @@
 pytest-random-order
 ===================================
 
-.. image:: https://img.shields.io/badge/python-3.7%2C%203.8%2C%203.9%2C%203.10-blue.svg
+.. image:: https://img.shields.io/badge/python-3.11%2C%203.12%2C%203.13%2C%203.14%2C%203.15-blue.svg
     :target: https://github.com/jbasko/pytest-random-order
 
 **pytest-random-order** is a `pytest <http://pytest.org>`_ plugin that randomises the order of tests.
