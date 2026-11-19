@@ -244,3 +244,22 @@ def test_failed_first(tmp_tree_of_tests, get_test_calls, bucket):
     calls2 = get_test_calls(result2)
     first_three_tests = {c.name for c in calls2[:3]}
     assert {"test_a1", "test_b2", "test_ee2"} == first_three_tests
+
+
+def test_failed_first_after_collection_error_and_nested_class(testdir):
+    testdir.makepyfile(
+        test_broken="import does_not_exist",
+        test_nested=textwrap.dedent("""
+            class TestOuter:
+                class TestInner:
+                    def test_fail(self):
+                        assert False
+
+            def test_pass():
+                pass
+        """),
+    )
+    testdir.runpytest("--continue-on-collection-errors").assert_outcomes(passed=1, failed=1, errors=1)
+
+    result = testdir.runpytest("--continue-on-collection-errors", "--failed-first")
+    result.assert_outcomes(passed=1, failed=1, errors=1)
