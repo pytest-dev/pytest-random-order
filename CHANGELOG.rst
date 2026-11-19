@@ -7,6 +7,7 @@ UNRELEASED
 ++++++++++
 
 * Dropped support for Python 3.9 and 3.10 (Python 3.11+ is now required) and added support for Python 3.14 and 3.15.
+* Fix `#41 <https://github.com/pytest-dev/pytest-random-order/issues/41>`_ and `#53 <https://github.com/pytest-dev/pytest-random-order/issues/53>`_: ``--failed-first`` no longer crashes with ``NotImplementedError`` when the last run had a collection error or failures in nested classes.
 
 1.2.0
 +++++

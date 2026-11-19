@@ -19,17 +19,6 @@ def process_failed_first_last_failed(session, config, items):
     if not last_failed_raw:
         return
 
-    # Get the names of last failed tests
-    last_failed = []
-    for key in last_failed_raw:
-        parts = key.split("::")
-        if len(parts) == 3:
-            last_failed.append(tuple(parts))
-        elif len(parts) == 2:
-            last_failed.append((parts[0], None, parts[1]))
-        else:
-            raise NotImplementedError()
-
     def assign_last_failed_to_same_bucket(item, key):
         if item.nodeid in last_failed_raw:
             return FAILED_FIRST_LAST_FAILED_BUCKET_KEY
