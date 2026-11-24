@@ -20,10 +20,10 @@ jobs:
       SETUPTOOLS_SCM_PRETEND_VERSION: ${{ github.event.inputs.version }}
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Build and Check Package
-      uses: hynek/build-and-inspect-python-package@v2.17.0
+      uses: hynek/build-and-inspect-python-package@v2.18.0
       with:
         attest-build-provenance-github: 'true'
 
@@ -38,7 +38,7 @@ jobs:
       pull-requests: write  # For merging the release PR.
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
 
     - name: Download Package
       uses: actions/download-artifact@v8
@@ -47,7 +47,7 @@ jobs:
         path: dist
 
     - name: Publish package to PyPI
-      uses: pypa/gh-action-pypi-publish@v1.14.0
+      uses: pypa/gh-action-pypi-publish@v1.14.1
       with:
         attestations: true
 
